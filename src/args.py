@@ -8,9 +8,13 @@ def get_args():
     parser.add_argument("--app_name", type=str, default="Zeiss_classification_task")
     parser.add_argument("--data_filename", type=str, default="./data/insurance_claims.csv",
                                     help="data file in csv format")
-    parser.add_argument("--columns_to_drop", type=tuple, 
-                        default=('policy_number','policy_bind_date','policy_state','insured_zip','incident_location',
-                        'incident_date','auto_make','auto_model','insured_occupation','age', 'total_claim_amount'))
+    parser.add_argument("--columns_to_drop", type=list, 
+                        default=['policy_number','policy_bind_date','policy_state','insured_zip','incident_location',
+                        'incident_date','auto_make','auto_model','insured_occupation','age', 'total_claim_amount'])
+    parser.add_argument("--schema_filename", type=str, default="/src/data/feature_store/schema.pkl")
+    parser.add_argument("--columns_to_encode", type=list, 
+                        default=['policy_csl', 'insured_sex', 'insured_education_level','insured_hobbies', 'insured_relationship',
+                        'incident_type', 'incident_severity','authorities_contacted', 'incident_state', 'incident_city','collision_type'])
     parser.add_argument("--preprocess_hobbies", type=bool, default=True)
     parser.add_argument("--is_data_validation_needed", type=bool, default=True)
     parser.add_argument("--hyper_params", type=dict, 
