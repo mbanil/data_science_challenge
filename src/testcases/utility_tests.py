@@ -4,7 +4,7 @@ import pytest
 
 from pyspark.sql import SparkSession
 
-sys.path.append('../')
+sys.path.append('../../')
 print(sys.path)
 # sys.path.insert(0,os.getcwd()+'\\src')
 from utils import utils
