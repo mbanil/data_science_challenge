@@ -4,9 +4,10 @@ import pytest
 
 from pyspark.sql import SparkSession
 
-sys.path.append('../../')
+# sys.path.append('../../')
+sys.path.insert(0,os.getcwd()+'\\src')
 print(sys.path)
-# sys.path.insert(0,os.getcwd()+'\\src')
+
 from utils import utils
 
 
