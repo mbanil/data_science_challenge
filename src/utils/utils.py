@@ -44,16 +44,41 @@ def data_preprocessing(df, cols_todrop, is_preprocess_hobbies, cols_toencode):
 
 
 def remove_outliers(df):
+    """Removes outliers in the dataframe (in cloumn 'umbrella_limit')
+
+    Args:
+        df : spark dataset
+
+    Returns:
+        spark dataframe after removing outliers
+    """
 
     return df.where("umbrella_limit>=0")
     
 
 def drop_unnecessary_column(df, cols_todrop):
+    """Drop columns from spark df
+
+    Args:
+        df : spark dataset
+        cols_todrop (_type_): columns to be dropped
+
+    Returns:
+        spark dataframe after dropping columns 
+    """
 
     return df.drop(*cols_todrop)
 
 
 def preprocess_hobbies(df):
+    """ In thr column 'insured_hobbied' all values are converted to 'others' except 'chess' and 'cross-fit'
+
+    Args:
+        df : spark dataframe
+
+    Returns:
+        dataframe after the 'insured_hibbies' cloumn is cleaned
+    """
 
     return df.withColumn('insured_hobbies', when(df['insured_hobbies'] =='chess',df['insured_hobbies'])\
         .when(df['insured_hobbies'] =='cross-fit',df['insured_hobbies'])\
@@ -61,17 +86,48 @@ def preprocess_hobbies(df):
 
 
 def replace_na2mode(df, column):
+    """Replaced the '?' with mode in the column selected
+
+    Args:
+        df : spark dataframe
+        column : column in which the '?' values are to be replace
+
+    Returns:
+        processed dataframe
+    """
 
     mode =  df.groupby(column).count().orderBy("count", ascending=False).first()[0]
     return replace_by_condition(df, column, '?', mode, df['collision_type'])
 
 
 def replace_by_condition(df, column, condition, val_pos, val_neg):
+    """Replace '?' values in a column based on some condition
+
+    Args:
+        df : spark dataframe
+        column : column in which dataframe has to be replaced
+        condition : condition for replacing the value
+        val_pos : value to be replaced with if the condition is satisfied
+        val_neg : value to be replaced with if the condition is not satisfied
+
+    Returns:
+        processed spark dataframe
+    """
 
     return df.withColumn(column, when(df[column] == condition,val_pos).otherwise(val_neg))
 
 
 def encode_data(df,col):
+    """One Hot encoding of categorical columns
+
+    Args:
+        df : spark dataframe
+        col : categorical columns
+
+    Returns:
+        spark dataframe with one-hot encoding
+    """
+
     indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
 
     df = indexer.fit(df).transform(df)
@@ -87,18 +143,13 @@ def encode_data(df,col):
 
 
 def store_schema(df, schema_file):
-    """    
-    To store data schema if not already exists
-    
-    Paramters
-    --------------------------
-    df : pandas dataframe 
-    schema_file : path to schema file
-    
-    Returns
-    ---------------
-    None    
-    """   
+    """Store the column names as a schema file
+
+    Args:
+        df : spark dataframe
+        schema_file : file path
+    """
+
     if not os.path.isfile(schema_file):
         schema = {'columns': set(df.columns)}
         schema_file = open(os.getcwd() + schema_file, "wb")
