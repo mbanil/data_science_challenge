@@ -12,7 +12,7 @@ try:
                     level=logging.INFO,
                     handlers=[
                         logging.FileHandler(
-                                filename='./logger/log/log_{}.txt'.format(timestr),
+                                filename='./src/logger/log/log_{}.txt'.format(timestr),
                                 mode='a'
                             ),
                         logging.StreamHandler()
