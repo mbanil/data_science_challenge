@@ -38,6 +38,7 @@ py==1.11.0
 pydantic==1.9.0
 pyparsing==3.0.7
 pyrsistent==0.18.1
+pyspark==3.2.1
 pytest==7.0.1
 pywavelets==1.2.0
 pyyaml==6.0
