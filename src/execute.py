@@ -32,8 +32,6 @@ if __name__ == "__main__":
 
     store_schema(data, args.schema_filename)
 
-    train(data, args)
+    train(spark, data, args)
 
     spark.stop()
-
-

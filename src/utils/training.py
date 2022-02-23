@@ -43,17 +43,18 @@ def train_model_with_hyper_params_tuning(train, best_params_path):
     params = [{p.name: v for p, v in m.items()} for m in cvModel.getEstimatorParamMaps()]
     best_params = params[np.argmax(cvModel.avgMetrics)]
 
-    best_file = open(os.getcwd() + best_params_path + '/best_hyper_params.pkl', "wb")
+    best_file = open(os.getcwd() + best_params_path + '/best_hyper_parameters.pkl', "wb")
     pickle.dump(best_params, best_file)
+    best_file.close()
 
     return cvModel
 
 def train_model(best_params_path, train):
 
-    best_hyper_params = pickle.load( open( best_params_path + 'best_hyper_params.pkl', "rb" ) )
+    best_hyper_params = pickle.load( open(os.getcwd() + best_params_path + '/best_hyper_parameters.pkl', "rb" ) )
     
-    rf = RandomForestClassifier(featuresCol = 'features', labelCol = 'label', numTrees=best_hyper_params.numTrees,
-                                        impurity= best_hyper_params.impurity, maxDepth=best_hyper_params.impurity)
+    rf = RandomForestClassifier(featuresCol = 'features', labelCol = 'label', numTrees=best_hyper_params['numTrees'],
+                                        impurity= best_hyper_params['impurity'], maxDepth=best_hyper_params['maxDepth'])
                                         
     rfModel = rf.fit(train)
 
@@ -63,10 +64,11 @@ def train_model(best_params_path, train):
 def save_model(model, model_path):
 
     model_file = open(os.getcwd() + model_path + '/model.pkl', "wb")
-    pickle.dump(model, best_file)
+    pickle.dump(model, model_file)
+    model_file.close()
 
 
-def train(df, args):
+def train(spark, df, args):
 
     df = prepare_df(df)
 
@@ -77,12 +79,15 @@ def train(df, args):
     if args.tune_hyper_params:
         model = train_model_with_hyper_params_tuning(train, args.best_hyper_params_filepath)
     else:
-        model = train_model
+        model = train_model(args.best_hyper_params_filepath, train)
 
     predictions = model.transform(test)
 
     evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-    accuracy =  evaluator.evaluate(rfModel.transform(test))
-    print("Accuracy = %s" % (accuracy))
+    auc =  evaluator.evaluate(predictions)
+    print("AUC = %s" % (auc))
 
+    sc = spark.sparkContext
+
+    # model.save(os.getcwd() + args.model_path + '/rf')
     save_model(model, args.model_path)
