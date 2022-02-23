@@ -1,0 +1,64 @@
+2022-02-23:18:46:19,741 INFO     [utils.py:157] NumExpr defaulting to 8 threads.
+2022-02-23:18:46:20,159 INFO     [execute.py:19] Begin execution
+2022-02-23:18:46:20,164 INFO     [execute.py:23] Arguments:
+Namespace(app_name='Zeiss_classification_task', best_hyper_params_filepath='/src/data/best_hyper_params', columns_to_drop=['policy_number', 'policy_bind_date', 'policy_state', 'insured_zip', 'incident_location', 'incident_date', 'auto_make', 'auto_model', 'insured_occupation', 'age', 'total_claim_amount'], columns_to_encode=['policy_csl', 'insured_sex', 'insured_education_level', 'insured_hobbies', 'insured_relationship', 'incident_type', 'incident_severity', 'authorities_contacted', 'incident_state', 'incident_city', 'collision_type'], data_filename='./data/insurance_claims.csv', hyper_params={'criterion': 'gini', 'max_depth': 5, 'min_samples_leaf': 2, 'min_samples_split': 2}, model_path='/src/model', preprocess_hobbies=True, schema_filename='/src/data/feature_store/schema.pkl', target='fraud_reported', tune_hyper_params=False)
+2022-02-23:18:46:20,165 INFO     [execute.py:25] Starting spark session
+2022-02-23:18:48:17,889 INFO     [java_gateway.py:1147] Error while sending.
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1145, in send_command
+    self.socket.sendall(command.encode("utf-8"))
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2022-02-23:18:48:17,891 INFO     [java_gateway.py:999] Exception while sending command.
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1145, in send_command
+    self.socket.sendall(command.encode("utf-8"))
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 985, in send_command
+    response = connection.send_command(command)
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1149, in send_command
+    "Error while sending", e, proto.ERROR_ON_SEND)
+py4j.protocol.Py4JNetworkError: Error while sending
+2022-02-23:18:48:19,926 ERROR    [java_gateway.py:1078] An error occurred while trying to connect to the Java server (127.0.0.1:51093)
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1145, in send_command
+    self.socket.sendall(command.encode("utf-8"))
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 985, in send_command
+    response = connection.send_command(command)
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1149, in send_command
+    "Error while sending", e, proto.ERROR_ON_SEND)
+py4j.protocol.Py4JNetworkError: Error while sending
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it
+2022-02-23:18:48:21,969 ERROR    [java_gateway.py:1078] An error occurred while trying to connect to the Java server (127.0.0.1:51093)
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 929, in _get_connection
+    connection = self.deque.pop()
+IndexError: pop from an empty deque
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\anilm\anaconda3\envs\zeiss\lib\site-packages\py4j\java_gateway.py", line 1067, in start
+    self.socket.connect((self.address, self.port))
+ConnectionRefusedError: [WinError 10061] No connection could be made because the target machine actively refused it

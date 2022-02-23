@@ -1,0 +1,5 @@
+2022-02-23:19:00:14,206 INFO     [utils.py:157] NumExpr defaulting to 8 threads.
+2022-02-23:19:00:14,470 INFO     [execute.py:19] Begin execution
+2022-02-23:19:00:14,472 INFO     [execute.py:23] Arguments:
+Namespace(app_name='Zeiss_classification_task', best_hyper_params_filepath='/src/data/best_hyper_params', columns_to_drop=['policy_number', 'policy_bind_date', 'policy_state', 'insured_zip', 'incident_location', 'incident_date', 'auto_make', 'auto_model', 'insured_occupation', 'age', 'total_claim_amount'], columns_to_encode=['policy_csl', 'insured_sex', 'insured_education_level', 'insured_hobbies', 'insured_relationship', 'incident_type', 'incident_severity', 'authorities_contacted', 'incident_state', 'incident_city', 'collision_type'], data_filename='./data/insurance_claims.csv', hyper_params={'criterion': 'gini', 'max_depth': 5, 'min_samples_leaf': 2, 'min_samples_split': 2}, model_path='/src/model', preprocess_hobbies=True, schema_filename='/src/data/feature_store/schema.pkl', target='fraud_reported', tune_hyper_params=False)
+2022-02-23:19:00:14,474 INFO     [execute.py:25] Starting spark session
