@@ -3,9 +3,7 @@ import numpy as np
 import pickle
 import os
 
-# from utils import drop_unnecessary_column
-
-from pyspark.ml.classification import RandomForestClassifier
+from pyspark.ml.classification import RandomForestClassifier, RandomForestClassificationModel
 from pyspark.ml.feature import VectorAssembler
 
 from pyspark.ml.evaluation import BinaryClassificationEvaluator
@@ -61,13 +59,6 @@ def train_model(best_params_path, train):
     return rfModel
 
 
-def save_model(model, model_path):
-
-    model_file = open(os.getcwd() + model_path + '/model.pkl', "wb")
-    pickle.dump(model, model_file)
-    model_file.close()
-
-
 def train(spark, df, args):
 
     df = prepare_df(df)
@@ -87,7 +78,5 @@ def train(spark, df, args):
     auc =  evaluator.evaluate(predictions)
     print("AUC = %s" % (auc))
 
-    sc = spark.sparkContext
+    model.write().overwrite().save(os.getcwd() + args.model_path + '/rf')
 
-    # model.save(os.getcwd() + args.model_path + '/rf')
-    save_model(model, args.model_path)
