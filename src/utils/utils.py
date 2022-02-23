@@ -134,7 +134,7 @@ def encode_data(df,col):
 
     onehotencoder = OneHotEncoder(inputCol=col+'Index', outputCol=col+'Vector')
 
-    df = onehotencoder.fit(df).transform(df)
+    df = onehotencoder.transform(df)
 
     cols_drop = (col,col+'Index')
     df = df.drop(*cols_drop)
