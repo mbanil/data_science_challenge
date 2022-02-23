@@ -16,7 +16,9 @@ def get_args():
                         default=['policy_csl', 'insured_sex', 'insured_education_level','insured_hobbies', 'insured_relationship',
                         'incident_type', 'incident_severity','authorities_contacted', 'incident_state', 'incident_city','collision_type'])
     parser.add_argument("--preprocess_hobbies", type=bool, default=True)
-    parser.add_argument("--is_data_validation_needed", type=bool, default=True)
+    parser.add_argument("--tune_hyper_params", type=bool, default=False)
+    parser.add_argument("--best_hyper_params_filepath", type=str, default='/src/data/best_hyper_params')
+    parser.add_argument("--model_path", type=str, default='/src/model')
     parser.add_argument("--hyper_params", type=dict, 
                         default={'criterion': 'gini', 
                                     'max_depth': 5, 
