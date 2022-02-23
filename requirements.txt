@@ -44,6 +44,7 @@ pytest==7.0.1
 pywavelets==1.2.0
 pyyaml==6.0
 requests==2.27.1
+schedule-1.1.0
 seaborn==0.11.2
 tabulate==0.8.9
 tangled-up-in-unicode==0.1.0
