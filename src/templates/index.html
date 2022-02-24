@@ -29,10 +29,6 @@
                         <label for="main_text">Main Text</label>
                         <textarea class="form-control" id="main_text" rows="3"></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="add_text">Additional Text</label>
-                        <textarea class="form-control" id="add_text" rows="3"></textarea>
-                    </div>
                 </form>
                 <button class="button btn btn-primary " id="start">Run</button>
                 <br>
@@ -47,17 +43,16 @@
                     let button = document.getElementById("start")
                     
                     button.addEventListener('click', () => {
-                        if (document.getElementById("main_text").value.length < 1 && document.getElementById("add_text").value.length < 1) {
+                        if (document.getElementById("main_text").value.length < 1) {
                             alert('Values cannot be empty')
                             return ''
                         }
                         var postData = {
-                            main_text: document.getElementById("main_text").value, 
-                            add_text: document.getElementById("add_text").value
+                            data: document.getElementById("main_text").value
                         };
                         $.ajax({
                             type: "get",
-                            url: "./predict-product",
+                            url: "./predict-fraud",
                             data: postData,
                             success: function (responseData, textStatus, jqXHR) {
                                 document.getElementById('result').innerText = "Result: " + responseData['product-group']
