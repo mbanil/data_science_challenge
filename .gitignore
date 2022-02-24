@@ -1,0 +1,6 @@
+.pytest_cache
+
+
+src/__pycache__
+
+src/logger/__pycache__
