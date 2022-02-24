@@ -1,1 +1,1 @@
-{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645714121684,"sparkVersion":"2.3.4","uid":"StringIndexer_4c2eab4a4ed64a4c491e","paramMap":{"handleInvalid":"error","inputCol":"incident_city","outputCol":"incident_cityIndex","stringOrderType":"frequencyDesc"}}
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645720616628,"sparkVersion":"2.3.4","uid":"StringIndexer_448796331b848e61b131","paramMap":{"handleInvalid":"error","stringOrderType":"frequencyDesc","outputCol":"incident_cityIndex","inputCol":"incident_city"}}

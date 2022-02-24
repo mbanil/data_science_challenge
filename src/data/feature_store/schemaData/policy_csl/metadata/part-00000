@@ -1,1 +1,1 @@
-{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645714110337,"sparkVersion":"2.3.4","uid":"StringIndexer_46bc947ca0ab3cfb45ce","paramMap":{"stringOrderType":"frequencyDesc","outputCol":"policy_cslIndex","inputCol":"policy_csl","handleInvalid":"error"}}
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645720608030,"sparkVersion":"2.3.4","uid":"StringIndexer_4d5bbfef01e5d8ac795c","paramMap":{"handleInvalid":"error","inputCol":"policy_csl","stringOrderType":"frequencyDesc","outputCol":"policy_cslIndex"}}

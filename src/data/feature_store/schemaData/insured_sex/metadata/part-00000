@@ -1,1 +1,1 @@
-{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645714118147,"sparkVersion":"2.3.4","uid":"StringIndexer_4dc2968ea0b89b9066e3","paramMap":{"outputCol":"insured_sexIndex","inputCol":"insured_sex","stringOrderType":"frequencyDesc","handleInvalid":"error"}}
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645720609323,"sparkVersion":"2.3.4","uid":"StringIndexer_4627a790a7081f1156e7","paramMap":{"handleInvalid":"error","outputCol":"insured_sexIndex","inputCol":"insured_sex","stringOrderType":"frequencyDesc"}}

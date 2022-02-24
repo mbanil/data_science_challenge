@@ -1,1 +1,1 @@
-{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645714119606,"sparkVersion":"2.3.4","uid":"StringIndexer_40718a821d91c66ea57e","paramMap":{"inputCol":"insured_relationship","handleInvalid":"error","stringOrderType":"frequencyDesc","outputCol":"insured_relationshipIndex"}}
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645720612171,"sparkVersion":"2.3.4","uid":"StringIndexer_4b51b2683ffb4acc8dbb","paramMap":{"stringOrderType":"frequencyDesc","handleInvalid":"error","outputCol":"insured_relationshipIndex","inputCol":"insured_relationship"}}

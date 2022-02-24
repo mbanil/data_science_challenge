@@ -130,11 +130,12 @@ def encode_data(df,col,storeSchema, schema_path):
 
     if(storeSchema):
         indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
+        df = indexer.fit(df).transform(df)
         indexer.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/' + col)
     else:
         indexer = StringIndexer.load(os.getcwd() + schema_path + '/schemaData/' + col)
+        df = indexer.fit(df).transform(df)
 
-    df = indexer.fit(df).transform(df)
 
     onehotencoder = OneHotEncoder(inputCol=col+'Index', outputCol=col+'Vector')
 
