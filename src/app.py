@@ -6,6 +6,7 @@ import pandas as pd
 
 from pyspark.sql import SparkSession
 from pyspark.ml.classification import RandomForestClassifier, RandomForestClassificationModel
+from pyspark.ml.feature import VectorAssembler
 
 from utils.utils import data_preprocessing
 import requests
@@ -62,7 +63,7 @@ def prediction_product(data=None):
     rfModel = RandomForestClassificationModel.load(os.getcwd() + args.model_path + '/rf')
     predictionsDF = rfModel.transform(df)
 
-    predictionsDF_pandas = predictionsDF.toPandas()
+    predictionsDF_pandas = predictionsDF.select("prediction").toPandas().toPandas()
     predictions_json = predictionsDF_pandas.to_json()
 
     return predictions_json

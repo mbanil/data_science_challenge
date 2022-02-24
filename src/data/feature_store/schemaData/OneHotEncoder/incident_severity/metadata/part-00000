@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoder","timestamp":1645725053952,"sparkVersion":"2.3.4","uid":"OneHotEncoder_4c088b3daf0ac998e897","paramMap":{"dropLast":true,"outputCol":"incident_severityVector","inputCol":"incident_severityIndex"}}

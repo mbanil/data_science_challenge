@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645725052054,"sparkVersion":"2.3.4","uid":"StringIndexer_46fdb59ba20e70897ca9","paramMap":{"inputCol":"insured_hobbies","outputCol":"insured_hobbiesIndex","handleInvalid":"error","stringOrderType":"frequencyDesc"}}

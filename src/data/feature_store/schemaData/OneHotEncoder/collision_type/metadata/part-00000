@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoder","timestamp":1645725056183,"sparkVersion":"2.3.4","uid":"OneHotEncoder_426f9a42976d2fdbba72","paramMap":{"inputCol":"collision_typeIndex","outputCol":"collision_typeVector","dropLast":true}}

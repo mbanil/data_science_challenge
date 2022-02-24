@@ -131,15 +131,17 @@ def encode_data(df,col,storeSchema, schema_path):
     if(storeSchema):
         indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
         df = indexer.fit(df).transform(df)
-        indexer.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/' + col)
+        indexer.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/StringIndexer/' + col)
+
+        onehotencoder = OneHotEncoder(inputCol=col+'Index', outputCol=col+'Vector')
+        df = onehotencoder.transform(df)
+        onehotencoder.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/OneHotEncoder/' + col)
+
     else:
-        indexer = StringIndexer.load(os.getcwd() + schema_path + '/schemaData/' + col)
+        indexer = StringIndexer.load(os.getcwd() + schema_path + '/schemaData/StringIndexer/' + col)
         df = indexer.fit(df).transform(df)
-
-
-    onehotencoder = OneHotEncoder(inputCol=col+'Index', outputCol=col+'Vector')
-
-    df = onehotencoder.transform(df)
+        onehotencoder = OneHotEncoder.load(os.getcwd() + schema_path + '/schemaData/OneHotEncoder/' + col)
+        df = onehotencoder.transform(df)
 
     cols_drop = (col,col+'Index')
     df = df.drop(*cols_drop)

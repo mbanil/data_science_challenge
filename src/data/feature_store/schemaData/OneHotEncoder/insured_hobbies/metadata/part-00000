@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoder","timestamp":1645725052282,"sparkVersion":"2.3.4","uid":"OneHotEncoder_42238fadfd73ffbbd861","paramMap":{"dropLast":true,"inputCol":"insured_hobbiesIndex","outputCol":"insured_hobbiesVector"}}

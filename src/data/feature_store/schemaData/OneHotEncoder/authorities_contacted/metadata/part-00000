@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoder","timestamp":1645725054459,"sparkVersion":"2.3.4","uid":"OneHotEncoder_45bd824da9bb512f9909","paramMap":{"outputCol":"authorities_contactedVector","dropLast":true,"inputCol":"authorities_contactedIndex"}}

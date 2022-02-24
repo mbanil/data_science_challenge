@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoder","timestamp":1645725052875,"sparkVersion":"2.3.4","uid":"OneHotEncoder_40889b41f51e321b9a54","paramMap":{"inputCol":"insured_relationshipIndex","dropLast":true,"outputCol":"insured_relationshipVector"}}

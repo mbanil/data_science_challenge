@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645725051373,"sparkVersion":"2.3.4","uid":"StringIndexer_42e2b59b744d891ab7c2","paramMap":{"stringOrderType":"frequencyDesc","outputCol":"insured_education_levelIndex","handleInvalid":"error","inputCol":"insured_education_level"}}

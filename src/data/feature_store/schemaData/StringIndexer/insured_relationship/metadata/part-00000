@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.StringIndexer","timestamp":1645725052671,"sparkVersion":"2.3.4","uid":"StringIndexer_4ee7b21108175d417c52","paramMap":{"handleInvalid":"error","stringOrderType":"frequencyDesc","outputCol":"insured_relationshipIndex","inputCol":"insured_relationship"}}
