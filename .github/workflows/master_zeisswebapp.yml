@@ -41,7 +41,7 @@ jobs:
         with:
           name: python-app
           path: |
-            .
+            src/
 
 
   # steps:
@@ -84,4 +84,3 @@ jobs:
           app-name: 'zeissWebApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A3632B1566A94CBEB4C84F2897733D47 }}
-          package: "python-app/src"
