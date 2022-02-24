@@ -41,7 +41,7 @@ jobs:
         with:
           name: python-app
           path: |
-            "src/"
+            .
 
 
   # steps:
@@ -75,7 +75,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: python-app
-          path: "./src"
+          path: "python-app/src"
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
