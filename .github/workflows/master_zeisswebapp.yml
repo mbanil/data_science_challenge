@@ -75,7 +75,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: python-app
-          path: "python-app/src"
+          path: "."
           
       - name: 'Deploy to Azure Web App'
         uses: azure/webapps-deploy@v2
@@ -84,3 +84,4 @@ jobs:
           app-name: 'zeissWebApp'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_A3632B1566A94CBEB4C84F2897733D47 }}
+          package: "./python-app/src"
