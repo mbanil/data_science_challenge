@@ -1,6 +1,9 @@
 
 import pathlib
 import argparse
+from pyspark.sql import SparkSession
+
+
 # import pickle
 
 from flask import Flask, render_template, request
