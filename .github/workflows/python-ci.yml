@@ -27,3 +27,57 @@ jobs:
         pip install -r requirements.txt
     - name: Test with pytest
       run: python -m pytest --import-mode=append src/testcases/*.py
+
+
+#     action "Azure Login" {
+#   uses = "Azure/github-actions/login@master"
+#   env = {
+#     AZURE_SUBSCRIPTION = "YOUR_AZURE_SUBSCRIPTION_NAME"
+#   }
+#   secrets = ["AZURE_SERVICE_APP_ID", "AZURE_SERVICE_PASSWORD", "AZURE_SERVICE_TENANT"]
+# }
+
+# action "Deploy to Web App" {
+#   uses = "Azure/github-actions/webapp@master"
+#   needs = ["Azure Login"]
+#   env = {
+#     AZURE_APP_NAME = "YOUR_LINUX_WEB_APP_NAME"
+#     AZURE_APP_PACKAGE_LOCATION = "./"
+#   }
+# }
+
+  # build-and-deploy:
+  #       runs-on: ubuntu-latest
+  #       steps:
+  #       # checkout the repo
+  #       - name: 'Checkout GitHub Action'
+  #         uses: actions/checkout@main
+          
+  #       - name: 'Login via Azure CLI'
+  #         uses: azure/login@v1
+  #         with:
+  #           creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+  #       - name: 'Build and push image'
+  #         uses: azure/docker-login@v1
+  #         with:
+  #           login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+  #           username: ${{ secrets.REGISTRY_USERNAME }}
+  #           password: ${{ secrets.REGISTRY_PASSWORD }}
+  #       - run: |
+  #           docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+  #           docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+
+  #       - name: 'Deploy to Azure Container Instances'
+  #         uses: 'azure/aci-deploy@v1'
+  #         with:
+  #           resource-group: ${{ secrets.RESOURCE_GROUP }}
+  #           dns-name-label: ${{ secrets.RESOURCE_GROUP }}${{ github.run_number }}
+  #           image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/sampleapp:${{ github.sha }}
+  #           registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+  #           registry-username: ${{ secrets.REGISTRY_USERNAME }}
+  #           registry-password: ${{ secrets.REGISTRY_PASSWORD }}
+  #           name: aci-sampleapp
+  #           location: 'west us'
+
+
