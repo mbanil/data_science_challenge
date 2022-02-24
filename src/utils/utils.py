@@ -18,11 +18,11 @@ def data_extraction(spark, file_name, args):
     #     # writeLogFile(args.error_logfile, datetime.datetime.now().strftime('%Y-%m-%d : %H:%M:%S'), "| Log from file: "+os.path.basename(__file__) +"    "+ "Message: "+  str(e))                    
     
 
-def data_preprocessing(df, cols_todrop, is_preprocess_hobbies, cols_toencode):
+def data_preprocessing(df, args):
 
-    df = drop_unnecessary_column(df, cols_todrop)
+    df = drop_unnecessary_column(df, args.columns_to_drop)
 
-    if is_preprocess_hobbies:
+    if args.preprocess_hobbies:
         df = preprocess_hobbies(df)
     
     df = remove_outliers(df)
@@ -37,8 +37,8 @@ def data_preprocessing(df, cols_todrop, is_preprocess_hobbies, cols_toencode):
 
     df = replace_by_condition(df, 'fraud_reported', 'Y', 1 , 0)
 
-    for col in cols_toencode:
-        df = encode_data(df, col)
+    for col in args.columns_to_encode:
+        df = encode_data(df, col, args.store_schema, args.schema_path)
     
     return df
 
@@ -117,7 +117,7 @@ def replace_by_condition(df, column, condition, val_pos, val_neg):
     return df.withColumn(column, when(df[column] == condition,val_pos).otherwise(val_neg))
 
 
-def encode_data(df,col):
+def encode_data(df,col,storeSchema, schema_path):
     """One Hot encoding of categorical columns
 
     Args:
@@ -128,7 +128,11 @@ def encode_data(df,col):
         spark dataframe with one-hot encoding
     """
 
-    indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
+    if(storeSchema):
+        indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
+        indexer.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/' + col)
+    else:
+        indexer = StringIndexer.load(os.getcwd() + schema_path + '/schemaData/' + col)
 
     df = indexer.fit(df).transform(df)
 

@@ -11,7 +11,8 @@ def get_args():
     parser.add_argument("--columns_to_drop", type=list, 
                         default=['policy_number','policy_bind_date','policy_state','insured_zip','incident_location',
                         'incident_date','auto_make','auto_model','insured_occupation','age', 'total_claim_amount'])
-    parser.add_argument("--schema_filename", type=str, default="/src/data/feature_store/schema.pkl")
+    parser.add_argument("--store_schema", type=bool, default=False)
+    parser.add_argument("--schema_path", type=str, default="/src/data/feature_store/")
     parser.add_argument("--columns_to_encode", type=list, 
                         default=['policy_csl', 'insured_sex', 'insured_education_level','insured_hobbies', 'insured_relationship',
                         'incident_type', 'incident_severity','authorities_contacted', 'incident_state', 'incident_city','collision_type'])

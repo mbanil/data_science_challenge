@@ -27,10 +27,9 @@ if __name__ == "__main__":
     spark = SparkSession.builder.appName(args.app_name).getOrCreate()
 
     data = data_extraction(spark, args.data_filename, args)
-    data = data_preprocessing(data, cols_todrop = args.columns_to_drop, is_preprocess_hobbies = args.preprocess_hobbies,
-                                cols_toencode = args.columns_to_encode)
+    data = data_preprocessing(data, args)
 
-    store_schema(data, args.schema_filename)
+    # store_schema(data, args.schema_filename)
 
     train(spark, data, args)
 
