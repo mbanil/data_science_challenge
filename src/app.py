@@ -15,39 +15,39 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-spark = SparkSession.builder.appName("Zeiss_predict").getOrCreate()
+# spark = SparkSession.builder.appName("Zeiss_predict").getOrCreate()
 args = None
 
 @app.route('/')
 def index():
-    # return render_template('/index.html')
-    return "OK"
+    return render_template('/index.html')
+    # return "OK"
  
 
 @app.route('/predict-fraud', methods = ['GET'])
 def prediction_product(data=None):
 
-    args = parse_args()
+    # args = parse_args()
 
-    data_json = request.args.get('data')
+    # data_json = request.args.get('data')
     
-    a_json = json.loads(data_json)
-    df_pandas = pd.DataFrame.from_dict(a_json)
-    df_spark = spark.createDataFrame(df_pandas)
+    # a_json = json.loads(data_json)
+    # df_pandas = pd.DataFrame.from_dict(a_json)
+    # df_spark = spark.createDataFrame(df_pandas)
 
-    df_processed = data_preprocessing(df_spark, args)
+    # df_processed = data_preprocessing(df_spark, args)
     
-    features_cols = df.columns
-    assembler = VectorAssembler(inputCols=features_cols, outputCol="features")
-    df = assembler.transform(df)
+    # features_cols = df.columns
+    # assembler = VectorAssembler(inputCols=features_cols, outputCol="features")
+    # df = assembler.transform(df)
 
-    rfModel = RandomForestClassificationModel.load(os.getcwd() + args.model_path + '/rf')
-    predictionsDF = rfModel.transform(df)
+    # rfModel = RandomForestClassificationModel.load(os.getcwd() + args.model_path + '/rf')
+    # predictionsDF = rfModel.transform(df)
 
-    predictionsDF_pandas = predictionsDF.select("prediction").toPandas().toPandas()
-    predictions_json = predictionsDF_pandas.to_json()
+    # predictionsDF_pandas = predictionsDF.select("prediction").toPandas().toPandas()
+    # predictions_json = predictionsDF_pandas.to_json()
 
-    return predictions_json
+    return "predictions_json"
 
 
 def parse_args():
