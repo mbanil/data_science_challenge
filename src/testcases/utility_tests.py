@@ -1,22 +1,18 @@
 import os
 import sys
 import pytest
-
-from pyspark.sql import SparkSession
+import pandas as pd
 
 # sys.path.append('../../')
-sys.path.insert(0,os.getcwd()+'/src_pyspark')
+sys.path.insert(0,os.getcwd()+'/src')
 print(sys.path)
 
 from utils import utils
 
 
-spark = SparkSession.builder.appName('test_framework').getOrCreate()
-
-
 @pytest.fixture(scope='module')
 def data():
-    df = spark.read.csv('./src_pyspark/testcases/data_testcases/data_testcases.csv', header=True, sep=',', inferSchema=True)    
+    df = pd.read_csv('./src/testcases/data_testcases/data_testcases.csv')
     return df
 
 
@@ -24,16 +20,13 @@ def data():
 
 def test_remove_outliers(data):
     df = utils.remove_outliers(data)
-    print(df.show())
-    assert df.agg({'umbrella_limit': 'min'}).first()[0] == 0
+    print(df['umbrella_limit'].head())
+    assert df.shape[0]== 1
 
 def test_drop_columns(data):
     data = utils.drop_unnecessary_column(data, ['age'])
     assert ('age' in data.columns) == False
 
-# def test_pandas_to_spark(data):
-#     df = pandas_to_spark(spark, data)
-#     assert isinstance(df, pd.DataFrame) == False
 
 ###################################################################################################
 
