@@ -54,6 +54,9 @@ def load_pickle(path):
 
 def train(df, args):
 
+    df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
+    df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
+
     X = df[df.columns.drop('fraud_reported')]
     Y = df['fraud_reported']
 

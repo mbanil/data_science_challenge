@@ -43,9 +43,6 @@ def data_preprocessing(df, args):
 
 def replace2bin(df):
 
-    df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
-    df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
-
     df['property_damage'].replace(to_replace='YES', value=1, inplace=True)
     df['property_damage'].replace(to_replace='NO', value=0, inplace=True)
 
@@ -162,6 +159,6 @@ def store_schema(df, schema_file):
     """
 
     if not os.path.isfile(schema_file):
-        schema = {'columns': set(df.columns)}
+        schema = {'columns': list(df.columns)}
         schema_file = open(os.getcwd() + schema_file, "wb")
         pickle.dump(schema, schema_file)
