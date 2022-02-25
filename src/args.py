@@ -22,7 +22,7 @@ def get_args():
 
     parser.add_argument("--store_schema", type=bool, default=True)
     parser.add_argument("--preprocess_hobbies", type=bool, default=True)
-    parser.add_argument("--tune_hyper_params", type=bool, default=True)
+    parser.add_argument("--tune_hyper_params", type=bool, default=False)
     
     
     parser.add_argument("--grid_params", type=dict, 

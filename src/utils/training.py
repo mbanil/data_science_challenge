@@ -39,17 +39,17 @@ def tune_hyper_params(model, grid_params, X_train, y_train):
 
     return grid_search
 
-def save_best_params(model, best_params_path):
+def save_pickle(data, path):
 
-    best_file = open(os.getcwd() + best_params_path, "wb")
-    pickle.dump(model.best_params_, best_file)
-    best_file.close()
+    file = open(os.getcwd() + path, "wb")
+    pickle.dump(data, file)
+    file.close()
 
-def load_hyper_params(best_params_path):
+def load_pickle(path):
 
-    best_hyper_params = pickle.load( open(os.getcwd() + best_params_path, "rb" ) )
+    data = pickle.load( open(os.getcwd() + path, "rb" ) )
 
-    return best_hyper_params
+    return data
     
 
 def train(df, args):
@@ -73,21 +73,21 @@ def train(df, args):
 
         grid_search_result = tune_hyper_params(model_rfc, args.grid_params, X_train, y_train)
 
-        save_best_params(grid_search_result, args.best_hyper_params_filepath)
+        save_pickle(grid_search_result.best_params_, args.best_hyper_params_filepath)
 
         model = grid_search_result.best_estimator_
         
     else:
-        hyper_params = load_hyper_params(args.best_hyper_params_filepath)
+        hyper_params = load_pickle(args.best_hyper_params_filepath)
         model = train_randomforest(X_train, y_train, hyper_params)
  
     y_pred = model.predict(X_test)
 
-    print("Training Accuracy: ", model_rfc.score(X_train, y_train))
-    print('Testing Accuarcy: ', model_rfc.score(X_test, y_test))
+    print("Training Accuracy: ", model.score(X_train, y_train))
+    print('Testing Accuarcy: ', model.score(X_test, y_test))
 
-    print(confusion_matrix(Y_test, y_pred_rf))
-    print(classification_report(Y_test, y_pred_rf))
+    print(confusion_matrix(y_test, y_pred))
+    print(classification_report(y_test, y_pred))
 
-    model.write().overwrite().save(os.getcwd() + args.model_path + '/rf')
+    save_pickle(model, args.model_path)
 
