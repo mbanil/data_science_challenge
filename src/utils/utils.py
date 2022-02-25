@@ -1,22 +1,22 @@
 import os
 import pickle
+import pandas as pd
+import numpy as np
 
-from pyspark.sql.functions import when
-from pyspark.ml.feature import StringIndexer
-from pyspark.ml.feature import OneHotEncoder
+from logger import LOG
 
+def data_extraction(file_name):
 
-def data_extraction(spark, file_name, args):
+    try:
+        if os.path.isfile(file_name):
+            df = pd.read_csv(file_name)
+            return df
 
-    # try:
-    if os.path.isfile(file_name):
-        df = spark.read.csv(file_name, header=True, sep=',', inferSchema=True)
-        return df
-    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
-    
-    # except Exception as e:
-    #     # writeLogFile(args.error_logfile, datetime.datetime.now().strftime('%Y-%m-%d : %H:%M:%S'), "| Log from file: "+os.path.basename(__file__) +"    "+ "Message: "+  str(e))                    
-    
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
+    except Exception as e:
+        LOG.exception("Exception occured: " + e)
+            
+
 
 def data_preprocessing(df, args):
 
@@ -27,19 +27,31 @@ def data_preprocessing(df, args):
     
     df = remove_outliers(df)
 
+    df = df.replace('?',np.NaN)
+    
     df = replace_na2mode(df, "collision_type")
     
     columns_with_na = ['property_damage', 'police_report_available']
 
     for col in columns_with_na:
-        df = replace_by_condition(df, col, '?', 'NO', df[col])
-        df = replace_by_condition(df, col, 'YES', 1, 0)
+        df = remove_nan2no(df,col)
 
-    df = replace_by_condition(df, 'fraud_reported', 'Y', 1 , 0)
+    df = replace2bin(df)
 
-    for col in args.columns_to_encode:
-        df = encode_data(df, col, args.store_schema, args.schema_path)
-    
+    return df
+
+
+def replace2bin(df):
+
+    df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
+    df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
+
+    df['property_damage'].replace(to_replace='YES', value=1, inplace=True)
+    df['property_damage'].replace(to_replace='NO', value=0, inplace=True)
+
+    df['police_report_available'].replace(to_replace='YES', value=1, inplace=True)
+    df['police_report_available'].replace(to_replace='NO', value=0, inplace=True)
+
     return df
 
 
@@ -47,46 +59,67 @@ def remove_outliers(df):
     """Removes outliers in the dataframe (in cloumn 'umbrella_limit')
 
     Args:
-        df : spark dataset
+        df : pandas dataset
 
     Returns:
-        spark dataframe after removing outliers
+        pandas dataframe after removing outliers
     """
 
-    return df.where("umbrella_limit>=0")
-    
+    df.drop(df[df['umbrella_limit'] < 0].index, inplace = True)
+
+    LOG.info("Removed outliers in column 'umbrella_limit'")
+    LOG.info(df.head())
+
+    return df
+
 
 def drop_unnecessary_column(df, cols_todrop):
-    """Drop columns from spark df
+    """Drop columns from df
 
     Args:
-        df : spark dataset
-        cols_todrop (_type_): columns to be dropped
+        df : pandas dataset
+        cols_todrop : columns to be dropped
 
     Returns:
-        spark dataframe after dropping columns 
+        pandas dataframe after dropping columns 
     """
 
-    return df.drop(*cols_todrop)
+    df.drop(cols_todrop, inplace = True, axis = 1)
+
+    LOG.info("Dropped unnecessary columns from the dataframe")
+    LOG.info(df.head())
+
+
+    return df
 
 
 def preprocess_hobbies(df):
-    """ In thr column 'insured_hobbied' all values are converted to 'others' except 'chess' and 'cross-fit'
+    """ In the column 'insured_hobbied' all values are converted to 'others' except 'chess' and 'cross-fit'
 
     Args:
-        df : spark dataframe
+        df : pandas dataframe
 
     Returns:
         dataframe after the 'insured_hibbies' cloumn is cleaned
     """
 
-    return df.withColumn('insured_hobbies', when(df['insured_hobbies'] =='chess',df['insured_hobbies'])\
-        .when(df['insured_hobbies'] =='cross-fit',df['insured_hobbies'])\
-        .otherwise('Others'))
+    df['insured_hobbies']=df['insured_hobbies'].apply(lambda x :'Other' if x!='chess' and x!='cross-fit' else x)
+
+    LOG.info("Pre-processed hobbies columns")
+    LOG.info(df.head())
+
+    return df
+
+
+def remove_nan2no(df, column):
+
+    df[column].fillna('NO', inplace = True)
+
+    return df
 
 
 def replace_na2mode(df, column):
-    """Replaced the '?' with mode in the column selected
+    """Replaced the NaN with mode in the column selected
 
     Args:
         df : spark dataframe
@@ -96,28 +129,12 @@ def replace_na2mode(df, column):
         processed dataframe
     """
 
-    mode =  df.groupby(column).count().orderBy("count", ascending=False).first()[0]
-    return replace_by_condition(df, column, '?', mode, df['collision_type'])
+    df[column].fillna(df[column].mode()[0], inplace = True)
+
+    return df
 
 
-def replace_by_condition(df, column, condition, val_pos, val_neg):
-    """Replace '?' values in a column based on some condition
-
-    Args:
-        df : spark dataframe
-        column : column in which dataframe has to be replaced
-        condition : condition for replacing the value
-        val_pos : value to be replaced with if the condition is satisfied
-        val_neg : value to be replaced with if the condition is not satisfied
-
-    Returns:
-        processed spark dataframe
-    """
-
-    return df.withColumn(column, when(df[column] == condition,val_pos).otherwise(val_neg))
-
-
-def encode_data(df,col,storeSchema, schema_path):
+def encode_data(df,columns_to_encode):
     """One Hot encoding of categorical columns
 
     Args:
@@ -128,25 +145,12 @@ def encode_data(df,col,storeSchema, schema_path):
         spark dataframe with one-hot encoding
     """
 
-    if(storeSchema):
-        indexer = StringIndexer(inputCol=col, outputCol=col+'Index')
-        df = indexer.fit(df).transform(df)
-        indexer.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/StringIndexer/' + col)
+    cat_df = pd.get_dummies(df[columns_to_encode])
 
-        onehotencoder = OneHotEncoder(inputCol=col+'Index', outputCol=col+'Vector')
-        df = onehotencoder.transform(df)
-        onehotencoder.write().overwrite().save(os.getcwd() + schema_path + '/schemaData/OneHotEncoder/' + col)
+    df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  # joining numeric columns
+    # df_clean.head()
 
-    else:
-        indexer = StringIndexer.load(os.getcwd() + schema_path + '/schemaData/StringIndexer/' + col)
-        df = indexer.fit(df).transform(df)
-        onehotencoder = OneHotEncoder.load(os.getcwd() + schema_path + '/schemaData/OneHotEncoder/' + col)
-        df = onehotencoder.transform(df)
-
-    cols_drop = (col,col+'Index')
-    df = df.drop(*cols_drop)
-
-    return df
+    return df_clean
 
 
 def store_schema(df, schema_file):

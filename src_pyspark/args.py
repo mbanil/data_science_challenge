@@ -12,14 +12,14 @@ def get_args():
                         default=['policy_number','policy_bind_date','policy_state','insured_zip','incident_location',
                         'incident_date','auto_make','auto_model','insured_occupation','age', 'total_claim_amount'])
     parser.add_argument("--store_schema", type=bool, default=True)
-    parser.add_argument("--schema_path", type=str, default="/src/data/feature_store/")
+    parser.add_argument("--schema_path", type=str, default="/src_pyspark/data/feature_store/")
     parser.add_argument("--columns_to_encode", type=list, 
                         default=['policy_csl', 'insured_sex', 'insured_education_level','insured_hobbies', 'insured_relationship',
                         'incident_type', 'incident_severity','authorities_contacted', 'incident_state', 'incident_city','collision_type'])
     parser.add_argument("--preprocess_hobbies", type=bool, default=True)
     parser.add_argument("--tune_hyper_params", type=bool, default=False)
-    parser.add_argument("--best_hyper_params_filepath", type=str, default='/src/data/best_hyper_params')
-    parser.add_argument("--model_path", type=str, default='/src/model')
+    parser.add_argument("--best_hyper_params_filepath", type=str, default='/src_pyspark/data/best_hyper_params')
+    parser.add_argument("--model_path", type=str, default='/src_pyspark/model')
     parser.add_argument("--hyper_params", type=dict, 
                         default={'criterion': 'gini', 
                                     'max_depth': 5, 

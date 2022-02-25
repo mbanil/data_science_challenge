@@ -3,12 +3,11 @@
 
 from logger import LOG
 from args import get_args
-from utils.utils import data_preprocessing, data_extraction, store_schema
+from utils import utils
 from utils.training import train
 
 from datetime import datetime
 
-from pyspark.sql import SparkSession
 
 from utils.utils import remove_outliers
 
@@ -22,14 +21,12 @@ if __name__ == "__main__":
 
     LOG.info('Arguments:\n{}'.format(args))
 
-    LOG.info('Starting spark session')
-    
-    spark = SparkSession.builder.appName(args.app_name).getOrCreate()
+    data = utils.data_extraction(args.data_filename)
+    data = utils.data_preprocessing(data, args)
 
-    data = data_extraction(spark, args.data_filename, args)
-    data = data_preprocessing(data, args)
+    data = utils.encode_data(data, args.columns_to_encode)
 
-    # store_schema(data, args.schema_filename)
+    utils.store_schema(data, args.schema_path)
 
     train(spark, data, args)
 
