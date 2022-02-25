@@ -3,80 +3,91 @@ import numpy as np
 import pickle
 import os
 
-from pyspark.ml.classification import RandomForestClassifier, RandomForestClassificationModel
-from pyspark.ml.feature import VectorAssembler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
-from pyspark.ml.evaluation import BinaryClassificationEvaluator
+from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 
-from pyspark.ml import Pipeline
-from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+from imblearn.ensemble import BalancedRandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 
-def prepare_df(df):
+def standardize_data(df):
 
-    df = df.withColumnRenamed("fraud_reported","label")
-    features_cols = df.columns
-    features_cols.remove("label")
-    assembler = VectorAssembler(inputCols=features_cols, outputCol="features")
-    df = assembler.transform(df)
+    sc = StandardScaler()
+    df_std = sc.fit_transform(df)
 
-    return df
+    return df_std
+
+def train_randomforest(X_train, y_train, params=None):
+
+    if params:
+        model_rfc = BalancedRandomForestClassifier(criterion=params["criterion"], max_depth=params["max_depth"], 
+                                min_samples_leaf=params["min_samples_split"], min_samples_split= params["min_samples_leaf"])
+    else:
+        model_rfc = BalancedRandomForestClassifier()
+        
+            
+    model_rfc.fit(X_train, y_train)
+
+    return model_rfc
+
+def tune_hyper_params(model, grid_params, X_train, y_train):
     
+    grid_search = GridSearchCV(model, grid_params, n_jobs = -1,  cv = 5, verbose = 1)
+    grid_search.fit(X_train, y_train)
 
-def train_model_with_hyper_params_tuning(train, best_params_path):
+    return grid_search
 
-    rf = RandomForestClassifier(featuresCol = 'features', labelCol = 'label')
+def save_best_params(model, best_params_path):
 
-    pipeline = Pipeline(stages=[rf])
-    paramGrid = ParamGridBuilder().addGrid(rf.numTrees, [10, 20, 30])\
-                                .addGrid(rf.impurity , ['gini', 'entropy'])\
-                                .addGrid(rf.maxDepth, [3, 5, 7, 10]).build()
-
-    crossval = CrossValidator(estimator=pipeline,
-                            estimatorParamMaps=paramGrid,
-                            evaluator=BinaryClassificationEvaluator(),
-                            numFolds=5) 
-
-    cvModel = crossval.fit(train)
-
-    params = [{p.name: v for p, v in m.items()} for m in cvModel.getEstimatorParamMaps()]
-    best_params = params[np.argmax(cvModel.avgMetrics)]
-
-    best_file = open(os.getcwd() + best_params_path + '/best_hyper_parameters.pkl', "wb")
-    pickle.dump(best_params, best_file)
+    best_file = open(os.getcwd() + best_params_path, "wb")
+    pickle.dump(model.best_params_, best_file)
     best_file.close()
 
-    return cvModel
+def load_hyper_params(best_params_path):
 
-def train_model(best_params_path, train):
+    best_hyper_params = pickle.load( open(os.getcwd() + best_params_path, "rb" ) )
 
-    best_hyper_params = pickle.load( open(os.getcwd() + best_params_path + '/best_hyper_parameters.pkl', "rb" ) )
+    return best_hyper_params
     
-    rf = RandomForestClassifier(featuresCol = 'features', labelCol = 'label', numTrees=best_hyper_params['numTrees'],
-                                        impurity= best_hyper_params['impurity'], maxDepth=best_hyper_params['maxDepth'])
-                                        
-    rfModel = rf.fit(train)
 
-    return rfModel
+def train(df, args):
 
+    X = df[df.columns.drop('fraud_reported')]
+    Y = df['fraud_reported']
 
-def train(spark, df, args):
+    X_train_df, X_test_df, y_train_df, y_test_df = train_test_split(X, Y, test_size = 0.2, random_state=42)
 
-    df = prepare_df(df)
+    X_train = standardize_data(X_train_df)
+    X_test = standardize_data(X_test_df)
+    y_train = np.array(y_train_df)
+    y_test = np.array(y_test_df)
 
-    train, test = df.randomSplit([0.8, 0.2], seed = 2018)
-    print("Training Dataset Count: " + str(train.count()))
-    print("Test Dataset Count: " + str(test.count()))
+    print("Training Dataset Count: " + str(X_train.shape))
+    print("Test Dataset Count: " + str(X_test.shape))
+    
 
-    if args.tune_hyper_params:
-        model = train_model_with_hyper_params_tuning(train, args.best_hyper_params_filepath)
+    if(args.tune_hyper_params):
+        model_rfc = train_randomforest(X_train, y_train)
+
+        grid_search_result = tune_hyper_params(model_rfc, args.grid_params, X_train, y_train)
+
+        save_best_params(grid_search_result, args.best_hyper_params_filepath)
+
+        model = grid_search_result.best_estimator_
+        
     else:
-        model = train_model(args.best_hyper_params_filepath, train)
+        hyper_params = load_hyper_params(args.best_hyper_params_filepath)
+        model = train_randomforest(X_train, y_train, hyper_params)
+ 
+    y_pred = model.predict(X_test)
 
-    predictions = model.transform(test)
+    print("Training Accuracy: ", model_rfc.score(X_train, y_train))
+    print('Testing Accuarcy: ', model_rfc.score(X_test, y_test))
 
-    evaluator = BinaryClassificationEvaluator(metricName="areaUnderROC")
-    auc =  evaluator.evaluate(predictions)
-    print("AUC = %s" % (auc))
+    print(confusion_matrix(Y_test, y_pred_rf))
+    print(classification_report(Y_test, y_pred_rf))
 
     model.write().overwrite().save(os.getcwd() + args.model_path + '/rf')
 

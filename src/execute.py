@@ -28,6 +28,6 @@ if __name__ == "__main__":
 
     utils.store_schema(data, args.schema_path)
 
-    train(spark, data, args)
+    train(data, args)
 
     spark.stop()
