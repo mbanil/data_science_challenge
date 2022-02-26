@@ -2,8 +2,8 @@ import os
 import pathlib
 import argparse
 import json
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 
 from utils import utils, training
 import requests
@@ -23,35 +23,37 @@ def index():
 @app.route('/predict-fraud', methods = ['GET'])
 def prediction_product(data=None):
 
-    args = parse_args()
+    return 'test'
 
-    data_json = request.args.get('data')
+    # args = parse_args()
+
+    # data_json = request.args.get('data')
     
-    a_json = json.loads(data_json)
+    # a_json = json.loads(data_json)
 
-    print("OK")
+    # print("OK")
 
 
-    df = pd.DataFrame.from_dict(a_json)
-    df = utils.data_preprocessing(df, args)
-    df = utils.encode_data(df, args.columns_to_encode)
+    # df = pd.DataFrame.from_dict(a_json)
+    # df = utils.data_preprocessing(df, args)
+    # df = utils.encode_data(df, args.columns_to_encode)
 
-    schema = training.load_pickle(args.schema_path)
+    # schema = training.load_pickle(args.schema_path)
 
-    cols_original = list(schema["columns"])
+    # cols_original = list(schema["columns"])
 
-    cols_new = list(df.columns)
+    # cols_new = list(df.columns)
 
-    for col in cols_new:
-        if col.find("\\") != -1:
-            df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+    # for col in cols_new:
+    #     if col.find("\\") != -1:
+    #         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
 
-    cols_new = list(df.columns)
-    for col in cols_original:
-        if not col in cols_new:
-            df.insert(2, col, np.full(df.shape[0], 0), True)
+    # cols_new = list(df.columns)
+    # for col in cols_original:
+    #     if not col in cols_new:
+    #         df.insert(2, col, np.full(df.shape[0], 0), True)
 
-    df = df.reindex(columns=cols_original)
+    # df = df.reindex(columns=cols_original)
 
     # check original schema
 
