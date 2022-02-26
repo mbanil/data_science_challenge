@@ -13,11 +13,10 @@ try:
                     handlers=[
                         logging.FileHandler(
                                 filename='./src/logger/log/log_{}.txt'.format(timestr),
-                                mode='a'
+                                mode='w'
                             ),
                         logging.StreamHandler()
-                    ],
-                    force=True)
+                    ])
 except Exception :
     logging.exception("Something went wrong while initializing the custom logger")
     sys.exit("Something went wrong while initializing the custom logger")
