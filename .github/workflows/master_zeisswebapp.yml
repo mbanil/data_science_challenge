@@ -32,7 +32,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 pytest
           pip install -r src/requirements.txt
-          pip install -r test/requirements.txt
         
       - name: Test with pytest
         run: python -m pytest --import-mode=append src/testcases/*.py
@@ -42,7 +41,7 @@ jobs:
         with:
           name: python-app
           path: |
-            test/
+            src/
 
 
   # steps:

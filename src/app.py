@@ -16,6 +16,7 @@ args = None
 
 @app.route('/')
 def index():
+    return "OK"
     return render_template('/index.html')
  
 
@@ -96,13 +97,15 @@ def parse_args():
     return parser.parse_args()
 
 
-def start_server(host, port):
-    app.run(host=host, port=port, debug=False)
+# def start_server(host, port):
+#     app.run(host=host, port=port, debug=False)
 
     
 def main():
     args = parse_args()
-    start_server(args.host, args.port)
+    app.run()
+
+    # start_server(args.host, args.port)
 
 
 if __name__ == "__main__":
