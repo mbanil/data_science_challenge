@@ -50,11 +50,29 @@ def test_remove_nan2no(data):
     assert "NO" in data["property_damage"].unique()
 
 def test_replace_na2mode(data):
-    
+
     data = utils.replace_na2mode(data, "collision_type")
 
     assert "Front Collision" in data["collision_type"].unique()
 
+def test_data_preprocessing(data):
+
+    data = test_data_preprocessing(df)
 
 ###################################################################################################
 
+
+########################### Integration test block ##################################################
+
+# def test_get_categorical_data(preprocessed_data, data):
+#     actual = data_preprocessing(data)
+#     actual = get_categorical_data(actual, args)
+#     assert_frame_equal(preprocessed_data, actual)
+
+
+# def test_feature_extraction(preprocessed_data, data):
+#     actual = data_preprocessing(data)
+#     actual = feature_extraction(actual, args)
+#     assert_frame_equal(preprocessed_data, actual)
+    
+###################################################################################################
