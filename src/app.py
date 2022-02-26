@@ -8,7 +8,7 @@ import json
 import pandas as pd
 import numpy as np
 
-# from utils import utils, training
+from utils import utils, training
 import requests
 
 app = Flask(__name__)
@@ -19,16 +19,58 @@ def index():
    return render_template('index.html')
 
 
-@app.route('/hello', methods=['POST'])
-def hello():
-   name = request.form.get('name')
+@app.route('/predict-fraud', methods = ['GET'])
+def prediction_product(data=None):
 
-   if name:
-       print('Request for hello page received with name=%s' % name)
-       return render_template('hello.html', name = name)
-   else:
-       print('Request for hello page received with no name or blank name -- redirecting')
-       return redirect(url_for('index'))
+    return 'test'
+
+    # args = parse_args()
+
+    # data_json = request.args.get('data')
+    
+    # a_json = json.loads(data_json)
+
+    # print("OK")
+
+
+    # df = pd.DataFrame.from_dict(a_json)
+    # df = utils.data_preprocessing(df, args)
+    # df = utils.encode_data(df, args.columns_to_encode)
+
+    # schema = training.load_pickle(args.schema_path)
+
+    # cols_original = list(schema["columns"])
+
+    # cols_new = list(df.columns)
+
+    # for col in cols_new:
+    #     if col.find("\\") != -1:
+    #         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+
+    # cols_new = list(df.columns)
+    # for col in cols_original:
+    #     if not col in cols_new:
+    #         df.insert(2, col, np.full(df.shape[0], 0), True)
+
+    # df = df.reindex(columns=cols_original)
+
+    # check original schema
+
+    
+
+   #  model = training.load_pickle(args.model_path)
+
+   #  df = training.standardize_data(df)
+
+   #  model.predict(df)
+
+   #  results = model.predict(df)
+    
+
+   #  return {
+   #      'results': json. dumps(results.tolist())
+   #  }
+
 
 
 def parse_args():
