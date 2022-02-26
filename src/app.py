@@ -80,4 +80,4 @@ def parse_args():
    return parser.parse_args()
 
 if __name__ == '__main__':
-   app.run()
+   app.run(port=8000)
