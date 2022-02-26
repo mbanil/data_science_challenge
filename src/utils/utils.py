@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 import numpy as np
 
-from logger import LOG
+# from logger import LOG
 
 def data_extraction(file_name):
 
@@ -14,7 +14,8 @@ def data_extraction(file_name):
 
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
     except Exception as e:
-        LOG.exception("Exception occured: " + e)
+        print("Exception occured: " + e)
+        # LOG.exception("Exception occured: " + e)
             
 
 def data_preprocessing(df, args):
@@ -63,8 +64,8 @@ def remove_outliers(df):
 
     df.drop(df[df['umbrella_limit'] < 0].index, inplace = True)
 
-    LOG.info("Removed outliers in column 'umbrella_limit'")
-    LOG.info(df.head())
+    # LOG.info("Removed outliers in column 'umbrella_limit'")
+    # LOG.info(df.head())
 
     return df
 
@@ -82,8 +83,8 @@ def drop_unnecessary_column(df, cols_todrop):
 
     df.drop(cols_todrop, inplace = True, axis = 1)
 
-    LOG.info("Dropped unnecessary columns from the dataframe")
-    LOG.info(df.head())
+    # LOG.info("Dropped unnecessary columns from the dataframe")
+    # LOG.info(df.head())
 
 
     return df
@@ -101,8 +102,8 @@ def preprocess_hobbies(df):
 
     df['insured_hobbies']=df['insured_hobbies'].apply(lambda x :'Other' if x!='chess' and x!='cross-fit' else x)
 
-    LOG.info("Pre-processed hobbies columns")
-    LOG.info(df.head())
+    # LOG.info("Pre-processed hobbies columns")
+    # LOG.info(df.head())
 
     return df
 
