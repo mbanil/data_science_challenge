@@ -1,0 +1,67 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+        <!-- Latest compiled and minified CSS -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+           
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+            integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+            
+        <title>Predict Fraud</title>
+    </head>
+
+    <body class="">
+        <div class="container-fluid   p-5">
+            <div class="container  p-5">
+                <h3>Enter main and Additional text</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="main_text">Main Text</label>
+                        <textarea class="form-control" id="main_text" rows="3"></textarea>
+                    </div>
+                </form>
+                <button class="button btn btn-primary " id="start">Run</button>
+                <br>
+                <br>
+                <br>
+                <p id="result">Result: </p>
+            </div>
+        </div>
+        
+
+                <script>
+                    let button = document.getElementById("start")
+                    
+                    button.addEventListener('click', () => {
+                        if (document.getElementById("main_text").value.length < 1) {
+                            alert('Values cannot be empty')
+                            return ''
+                        }
+                        var postData = {
+                            data: document.getElementById("main_text").value
+                        };
+                        $.ajax({
+                            type: "get",
+                            url: "./predict-fraud",
+                            data: postData,
+                            success: function (responseData, textStatus, jqXHR) {
+                                document.getElementById('result').innerText = "Result: " + responseData['results'].toString()
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log(errorThrown);
+                            }
+                        })})
+                </script>
+          
+    </body>
+</html>
