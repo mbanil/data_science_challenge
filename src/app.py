@@ -64,15 +64,6 @@ def prediction_product(data=None):
 
     results = model.predict(df)
     
-    # features_cols = df.columns
-    # assembler = VectorAssembler(inputCols=features_cols, outputCol="features")
-    # df = assembler.transform(df)
-
-    # rfModel = RandomForestClassificationModel.load(os.getcwd() + args.model_path + '/rf')
-    # predictionsDF = rfModel.transform(df)
-
-    # predictionsDF_pandas = predictionsDF.select("prediction").toPandas().toPandas()
-    # predictions_json = predictionsDF_pandas.to_json()
 
     return {
         'results': json. dumps(results.tolist())
