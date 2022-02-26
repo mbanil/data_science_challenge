@@ -54,9 +54,9 @@ def test_replace_na2mode(data):
 
     assert "Front Collision" in data["collision_type"].unique()
 
-def test_data_preprocessing(data):
+# def test_data_preprocessing(data):
 
-    data = test_data_preprocessing(df)
+#     data = test_data_preprocessing(df)
 
 ###################################################################################################
 
