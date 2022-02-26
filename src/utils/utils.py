@@ -17,7 +17,6 @@ def data_extraction(file_name):
         LOG.exception("Exception occured: " + e)
             
 
-
 def data_preprocessing(df, args):
 
     df = drop_unnecessary_column(df, args.columns_to_drop)
