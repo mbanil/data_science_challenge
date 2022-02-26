@@ -22,54 +22,41 @@ def index():
 @app.route('/predict-fraud', methods = ['GET'])
 def prediction_product(data=None):
 
-    return 'test'
+   args = parse_args()
+   data_json = request.args.get('data')
+   
+   a_json = json.loads(data_json)
 
-    # args = parse_args()
+   df = pd.DataFrame.from_dict(a_json)
+   df = utils.data_preprocessing(df, args)
+   df = utils.encode_data(df, args.columns_to_encode)
 
-    # data_json = request.args.get('data')
-    
-    # a_json = json.loads(data_json)
+   schema = training.load_pickle(args.schema_path)
 
-    # print("OK")
+   cols_original = list(schema["columns"])
+   cols_new = list(df.columns)
 
+   for col in cols_new:
+      if col.find("\\") != -1:
+         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
 
-    # df = pd.DataFrame.from_dict(a_json)
-    # df = utils.data_preprocessing(df, args)
-    # df = utils.encode_data(df, args.columns_to_encode)
+   cols_new = list(df.columns)
+   for col in cols_original:
+      if not col in cols_new:
+         df.insert(2, col, np.full(df.shape[0], 0), True)
 
-    # schema = training.load_pickle(args.schema_path)
+   df = df.reindex(columns=cols_original)
 
-    # cols_original = list(schema["columns"])
+   #  check original schema
 
-    # cols_new = list(df.columns)
+   model = training.load_pickle(args.model_path)
+   df = training.standardize_data(df)
+   model.predict(df)
+   results = model.predict(df)
 
-    # for col in cols_new:
-    #     if col.find("\\") != -1:
-    #         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
-
-    # cols_new = list(df.columns)
-    # for col in cols_original:
-    #     if not col in cols_new:
-    #         df.insert(2, col, np.full(df.shape[0], 0), True)
-
-    # df = df.reindex(columns=cols_original)
-
-    # check original schema
-
-    
-
-   #  model = training.load_pickle(args.model_path)
-
-   #  df = training.standardize_data(df)
-
-   #  model.predict(df)
-
-   #  results = model.predict(df)
-    
-
-   #  return {
-   #      'results': json. dumps(results.tolist())
-   #  }
+   return {
+      'results': json. dumps(results.tolist())
+   }
 
 
 

@@ -42,6 +42,7 @@ jobs:
           name: python-app
           path: |
             src/
+            !venv/
 
 
   # steps:
