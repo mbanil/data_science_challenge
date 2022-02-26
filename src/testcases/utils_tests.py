@@ -7,7 +7,6 @@ import copy
 
 # sys.path.append('../../')
 sys.path.insert(0,os.getcwd()+'/src')
-print(sys.path)
 
 from utils import utils
 
