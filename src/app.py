@@ -8,7 +8,7 @@ import json
 import pandas as pd
 import numpy as np
 
-from utils import utils, training
+# from utils import utils, training
 import requests
 
 app = Flask(__name__)
