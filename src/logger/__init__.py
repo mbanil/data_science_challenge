@@ -16,7 +16,8 @@ try:
                                 mode='a'
                             ),
                         logging.StreamHandler()
-                    ])
+                    ],
+                    force=True)
 except Exception :
     logging.exception("Something went wrong while initializing the custom logger")
     sys.exit("Something went wrong while initializing the custom logger")
