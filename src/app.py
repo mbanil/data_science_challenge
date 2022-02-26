@@ -1,15 +1,21 @@
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 
+import os
+import pathlib
+import argparse
+import json
 import pandas as pd
 import numpy as np
+
+from utils import utils, training
+import requests
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-   print('Request for index page received')
    return render_template('index.html')
 
 
