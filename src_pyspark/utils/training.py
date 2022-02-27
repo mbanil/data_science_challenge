@@ -89,9 +89,9 @@ def train(spark, df, args):
     """Perform data processing, call the training methods and save the trained model
 
     Args:
-        spark (_type_): _description_
-        df (_type_): _description_
-        args (_type_): _description_
+        spark: spark session
+        df: spark dataframe
+        args: input arguments
     """
 
     df = prepare_df(df)

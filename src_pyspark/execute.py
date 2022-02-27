@@ -13,24 +13,27 @@ from pyspark.sql import SparkSession
 from utils.utils import remove_outliers
 
 if __name__ == "__main__":
-    # try:
-    start_time = datetime.now() 
 
-    LOG.info('Begin execution')
+    try:
+        start_time = datetime.now() 
 
-    args = get_args()
+        LOG.info('Begin execution')
 
-    LOG.info('Arguments:\n{}'.format(args))
+        args = get_args()
 
-    LOG.info('Starting spark session')
-    
-    spark = SparkSession.builder.appName(args.app_name).getOrCreate()
+        LOG.info('Arguments:\n{}'.format(args))
 
-    data = data_extraction(spark, args.data_filename, args)
-    data = data_preprocessing(data, args)
+        LOG.info('Starting spark session')
+        
+        spark = SparkSession.builder.appName(args.app_name).getOrCreate()
 
-    # store_schema(data, args.schema_filename)
+        data = data_extraction(spark, args.data_filename, args)
+        data = data_preprocessing(data, args)
 
-    train(spark, data, args)
+        store_schema(data, args.schema_filename)
 
-    spark.stop()
+        train(spark, data, args)
+
+        spark.stop()
+    except Exception as e:
+        print("Exception occured: ", e)

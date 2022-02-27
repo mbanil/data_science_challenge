@@ -7,18 +7,40 @@ from pyspark.ml.feature import OneHotEncoder
 
 
 def data_extraction(spark, file_name, args):
+    """Load data from csv file
 
-    # try:
-    if os.path.isfile(file_name):
-        df = spark.read.csv(file_name, header=True, sep=',', inferSchema=True)
-        return df
-    raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
+    Args:
+        spark: spark session
+        file_name: file path of the data
+        args: input arguments
+
+    Raises:
+        FileNotFoundError: File not found error
+
+    Returns:
+        loaded spark df    
+    """
+
+    try:
+        if os.path.isfile(file_name):
+            df = spark.read.csv(file_name, header=True, sep=',', inferSchema=True)
+            return df
+        raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
     
-    # except Exception as e:
-    #     # writeLogFile(args.error_logfile, datetime.datetime.now().strftime('%Y-%m-%d : %H:%M:%S'), "| Log from file: "+os.path.basename(__file__) +"    "+ "Message: "+  str(e))                    
+    except Exception as e:
+        print(args.error_logfile, datetime.datetime.now().strftime('%Y-%m-%d : %H:%M:%S'), "| Log from file: "+os.path.basename(__file__) +"    "+ "Message: "+  str(e))                    
     
 
 def data_preprocessing(df, args):
+    """ Pre-process data for training
+
+    Args:
+        df : spark df
+        args : input arguments
+
+    Returns:
+        Processed spark df
+    """
 
     df = drop_unnecessary_column(df, args.columns_to_drop)
 
