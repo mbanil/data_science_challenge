@@ -3,7 +3,7 @@ import pickle
 import pandas as pd
 import numpy as np
 
-# from logger import LOG
+from logger import LOG
 
 def data_extraction(file_path):
     """Method to load data from csv
@@ -26,7 +26,7 @@ def data_extraction(file_path):
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
     except Exception as e:
         print("Exception occured: " + e)
-        # LOG.exception("Exception occured: " + e)
+        LOG.exception("Exception occured: " + e)
             
 
 def data_preprocessing(df, args):
@@ -92,8 +92,8 @@ def remove_outliers(df):
 
     df.drop(df[df['umbrella_limit'] < 0].index, inplace = True)
 
-    # LOG.info("Removed outliers in column 'umbrella_limit'")
-    # LOG.info(df.head())
+    LOG.info("Removed outliers in column 'umbrella_limit'")
+    LOG.info(df.head())
 
     return df
 
@@ -111,8 +111,8 @@ def drop_unnecessary_column(df, cols_todrop):
 
     df.drop(cols_todrop, inplace = True, axis = 1)
 
-    # LOG.info("Dropped unnecessary columns from the dataframe")
-    # LOG.info(df.head())
+    LOG.info("Dropped unnecessary columns from the dataframe")
+    LOG.info(df.head())
 
 
     return df
@@ -130,8 +130,8 @@ def preprocess_hobbies(df):
 
     df['insured_hobbies']=df['insured_hobbies'].apply(lambda x :'Other' if x!='chess' and x!='cross-fit' else x)
 
-    # LOG.info("Pre-processed hobbies columns")
-    # LOG.info(df.head())
+    LOG.info("Pre-processed hobbies columns")
+    LOG.info(df.head())
 
     return df
 
@@ -162,7 +162,7 @@ def replace_na2mode(df, column):
     Returns:
         processed dataframe
     """
-    
+
     if(df.shape[0]==1):
         df[column].fillna("Front Collision", inplace = True)
     else:
@@ -184,7 +184,7 @@ def encode_data(df,columns_to_encode):
 
     cat_df = pd.get_dummies(df[columns_to_encode])
 
-    df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  # joining numeric columns
+    df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  #joining numeric columns
 
     return df_clean
 
