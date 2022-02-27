@@ -162,8 +162,11 @@ def replace_na2mode(df, column):
     Returns:
         processed dataframe
     """
-
-    df[column].fillna(df[column].mode()[0], inplace = True)
+    
+    if(df.shape[0]==1):
+        df[column].fillna("Front Collision", inplace = True)
+    else:
+        df[column].fillna(df[column].mode()[0], inplace = True)
 
     return df
 
