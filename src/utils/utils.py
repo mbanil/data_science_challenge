@@ -20,7 +20,13 @@ def data_extraction(file_path):
 
     try:
         if os.path.isfile(file_path):
+            LOG.info("Loading data")
+
             df = pd.read_csv(file_path)
+
+            LOG.info('Dataframe shape: {}'.format(df.shape))
+            LOG.info(df.head())
+
             return df
 
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
@@ -40,6 +46,8 @@ def data_preprocessing(df, args):
         Preprocessed dataframe
     """
 
+    LOG.info("Starting data pre-processing")
+
     df = drop_unnecessary_column(df, args.columns_to_drop)
 
     if args.preprocess_hobbies:
@@ -57,6 +65,9 @@ def data_preprocessing(df, args):
         df = remove_nan2no(df,col)
 
     df = replace2bin(df)
+
+    LOG.info("Finished data pre-processing")
+    LOG.info(df.head())
 
     return df
 
@@ -76,6 +87,9 @@ def replace2bin(df):
 
     df['police_report_available'].replace(to_replace='YES', value=1, inplace=True)
     df['police_report_available'].replace(to_replace='NO', value=0, inplace=True)
+
+    LOG.info("Replacing values to binary")
+    LOG.info(df.head())
 
     return df
 
@@ -148,6 +162,9 @@ def remove_nan2no(df, column):
     """
 
     df[column].fillna('NO', inplace = True)
+    
+    LOG.info("Replacing NaN values to 'NO'")
+    LOG.info(df.head())
 
     return df
 
@@ -168,6 +185,9 @@ def replace_na2mode(df, column):
     else:
         df[column].fillna(df[column].mode()[0], inplace = True)
 
+    LOG.info("Replacing NaN values with mode of the column")
+    LOG.info(df.head())
+
     return df
 
 
@@ -186,6 +206,9 @@ def encode_data(df,columns_to_encode):
 
     df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  #joining numeric columns
 
+    LOG.info("One hot encoding of categorical values")
+    LOG.info(df.head())
+
     return df_clean
 
 
@@ -196,6 +219,8 @@ def store_schema(df, schema_file):
         df : pandas dataframe
         schema_file : file path
     """
+
+    LOG.info("Save schema file of the df")
 
     if not os.path.isfile(schema_file):
         schema = {'columns': list(df.columns)}
