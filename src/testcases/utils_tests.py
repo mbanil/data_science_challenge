@@ -13,7 +13,7 @@ from utils import utils
 
 @pytest.fixture(scope='module')
 def data():
-    df = pd.read_csv('./src/testcases/data_testcases/data_testcases.csv')
+    df = pd.read_csv('./testcases/data_testcases/data_testcases.csv')
     return df
 
 
