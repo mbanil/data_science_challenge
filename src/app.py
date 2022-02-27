@@ -25,6 +25,8 @@ def index():
 @app.route('/predictfraud', methods = ['GET'])
 def predictfraud(data=None):
        
+   args = parse_args()
+       
    return "OK"
    
    # try:
