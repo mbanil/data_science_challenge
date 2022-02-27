@@ -28,14 +28,14 @@ def prediction_product(data=None):
    try:
       args = parse_args()
 
-
+      data_json = request.args.get('data')
+      
+      
       return {
 
-         "result": data
+         "results": str(data_json)
       }
 
-      # data_json = request.args.get('data')
-      
       # a_json = json.loads(data_json)
 
       
@@ -98,4 +98,4 @@ def parse_args():
    return parser.parse_args()
 
 if __name__ == '__main__':
-   app.run(port=8000, debug=True)
+   app.run(port=8000, debug=False)
