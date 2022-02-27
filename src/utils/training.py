@@ -21,6 +21,7 @@ def standardize_data(df):
     Returns:
         Standardized pandas dataframe
     """
+    LOG.info("Standardize Data")
 
     sc = StandardScaler()
     df_std = sc.fit_transform(df)
@@ -40,13 +41,15 @@ def train_randomforest(X_train, y_train, params=None):
         Trained random-forest model
     """
 
+    LOG.info('"Train random forest with hyper-params: {}'.format(str(params)))
+
     if params:
         model_rfc = BalancedRandomForestClassifier(criterion=params["criterion"], max_depth=params["max_depth"], 
                                 min_samples_leaf=params["min_samples_split"], min_samples_split= params["min_samples_leaf"])
     else:
         model_rfc = BalancedRandomForestClassifier()
-        
             
+    LOG.info('Fit random forest to training data')
     model_rfc.fit(X_train, y_train)
 
     return model_rfc
@@ -64,11 +67,13 @@ def tune_hyper_params(model, grid_params, X_train, y_train):
     Returns:
         Grid search output
     """
-    
+    LOG.info('"Tune random forest parameters in the range: {}'.format(str(grid_params)))
+
     grid_search = GridSearchCV(model, grid_params, n_jobs = -1,  cv = 5, verbose = 1)
     grid_search.fit(X_train, y_train)
 
     return grid_search
+
 
 def save_pickle(data, path):
     """Save data as a pickle file
@@ -78,9 +83,12 @@ def save_pickle(data, path):
         path : Path of the pickle file
     """
 
+    LOG.info('Save data as a pickle file')
+
     file = open(os.getcwd() + path, "wb")
     pickle.dump(data, file)
     file.close()
+
 
 def load_pickle(path):
     """Load pickle file
@@ -91,6 +99,7 @@ def load_pickle(path):
     Returns:
         Loaded pickle file
     """
+    LOG.info('Load data as a pickle file')
 
     data = pickle.load( open(os.getcwd() + path, "rb" ) )
 
@@ -104,12 +113,17 @@ def train(df, args):
         df: pandas dataframe
         args : Input arguments
     """
+    LOG.info("Begin training data")
 
     df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
     df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
 
+    LOG.info("Create input and output for training")
+
     X = df[df.columns.drop('fraud_reported')]
     Y = df['fraud_reported']
+
+    LOG.info("Split the data into training and test set")
 
     X_train_df, X_test_df, y_train_df, y_test_df = train_test_split(X, Y, test_size = 0.2, random_state=42)
 
@@ -118,9 +132,8 @@ def train(df, args):
     y_train = np.array(y_train_df)
     y_test = np.array(y_test_df)
 
-    print("Training Dataset Count: " + str(X_train.shape))
-    print("Test Dataset Count: " + str(X_test.shape))
-    
+    LOG.info('"Training Dataset Count: {}'.format(str(X_train.shape)))
+    LOG.info('"Test Dataset Count: {}'.format(str(X_test.shape)))    
 
     if(args.tune_hyper_params):
         model_rfc = train_randomforest(X_train, y_train)
@@ -135,13 +148,15 @@ def train(df, args):
         hyper_params = load_pickle(args.best_hyper_params_filepath)
         model = train_randomforest(X_train, y_train, hyper_params)
  
+    LOG.info('Predict test data')
     y_pred = model.predict(X_test)
 
-    print("Training Accuracy: ", model.score(X_train, y_train))
-    print('Testing Accuarcy: ', model.score(X_test, y_test))
+    LOG.info('Training Accuracy: {}'.format(model.score(X_train, y_train)))
+    LOG.info('"Testing Accuarcy: {}'.format(model.score(X_test, y_test)))  
 
-    print(confusion_matrix(y_test, y_pred))
-    print(classification_report(y_test, y_pred))
+    LOG.info(confusion_matrix(y_test, y_pred))
+    LOG.info(classification_report(y_test, y_pred))
+
+    LOG.info("End training data")
 
     save_pickle(model, args.model_path)
-

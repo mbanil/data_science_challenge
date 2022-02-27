@@ -27,6 +27,9 @@ if __name__ == "__main__":
         utils.store_schema(data, args.schema_path)
         train(data, args)
 
+        LOG.info('End execution')
+
+
     except Exception as e:
         print("Exception ")
 
