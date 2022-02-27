@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask import json
 from werkzeug.exceptions import HTTPException
 
+import sys
 import os
 import pathlib
 import argparse
@@ -14,7 +15,12 @@ import numpy as np
 from utils import utils, training
 import requests
 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+
 app = Flask(__name__)
+
+
 
 
 @app.route('/')
@@ -27,58 +33,47 @@ def predictfraud(data=None):
        
    args = parse_args()
        
-   return "OK"
+   # return "OK"
    
-   # try:
-   #    args = parse_args()
+   data_json = request.args.get('data')
+   
 
-   #    data_json = request.args.get('data')
-      
-      
-   #    return {
+   a_json = json.loads(data_json)
 
-   #       "results": str(data_json)
-   #    }
+   
 
-   #    # a_json = json.loads(data_json)
+   df = pd.DataFrame.from_dict(a_json)
+   df = utils.data_preprocessing(df, args)
+   df = utils.encode_data(df, args.columns_to_encode)
 
-      
+   
 
-   #    # df = pd.DataFrame.from_dict(a_json)
-   #    # df = utils.data_preprocessing(df, args)
-   #    # df = utils.encode_data(df, args.columns_to_encode)
+   schema = training.load_pickle(args.schema_path)
 
-      
+   cols_original = list(schema["columns"])
+   cols_new = list(df.columns)
 
-   #    # schema = training.load_pickle(args.schema_path)
+   for col in cols_new:
+      if col.find("\\") != -1:
+         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
 
-   #    # cols_original = list(schema["columns"])
-   #    # cols_new = list(df.columns)
+   cols_new = list(df.columns)
+   for col in cols_original:
+      if not col in cols_new:
+         df.insert(2, col, np.full(df.shape[0], 0), True)
 
-   #    # for col in cols_new:
-   #    #    if col.find("\\") != -1:
-   #    #       df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+   df = df.reindex(columns=cols_original)
 
-   #    # cols_new = list(df.columns)
-   #    # for col in cols_original:
-   #    #    if not col in cols_new:
-   #    #       df.insert(2, col, np.full(df.shape[0], 0), True)
+   #  check original schema
 
-   #    # df = df.reindex(columns=cols_original)
+   model = training.load_pickle(args.model_path)
+   df = training.standardize_data(df)
+   model.predict(df)
+   results = model.predict(df)
 
-   #    # #  check original schema
-
-   #    # model = training.load_pickle(args.model_path)
-   #    # df = training.standardize_data(df)
-   #    # model.predict(df)
-   #    # results = model.predict(df)
-
-   #    # return {
-   #    #    'results': json. dumps(results.tolist())
-   #    # }
-   # except Exception as e:
-   #    print(e)
-   #    return( str(e))
+   return {
+      'results': json. dumps(results.tolist())
+   }
 
 
 
