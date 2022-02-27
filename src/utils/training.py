@@ -13,13 +13,32 @@ from imblearn.ensemble import BalancedRandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 
 def standardize_data(df):
+    """Standardization of the input data
+
+    Args:
+        df : pandas dataframe
+
+    Returns:
+        Standardized pandas dataframe
+    """
 
     sc = StandardScaler()
     df_std = sc.fit_transform(df)
 
     return df_std
 
+
 def train_randomforest(X_train, y_train, params=None):
+    """Train a randm forest classifier
+
+    Args:
+        X_train : Input training data
+        y_train : Output training data
+        params (optional): Hyper-parameters for the model. Defaults to None.
+
+    Returns:
+        Trained random-forest model
+    """
 
     if params:
         model_rfc = BalancedRandomForestClassifier(criterion=params["criterion"], max_depth=params["max_depth"], 
@@ -32,7 +51,19 @@ def train_randomforest(X_train, y_train, params=None):
 
     return model_rfc
 
+
 def tune_hyper_params(model, grid_params, X_train, y_train):
+    """Tune hyper parameters
+
+    Args:
+        model : Classifier model    
+        grid_params: Range of hyper parameters for tuning
+        X_train (_type_): _description_
+        y_train (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     
     grid_search = GridSearchCV(model, grid_params, n_jobs = -1,  cv = 5, verbose = 1)
     grid_search.fit(X_train, y_train)

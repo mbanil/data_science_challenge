@@ -27,14 +27,18 @@ def prediction_product(data=None):
    
    try:
       args = parse_args()
-      data_json = request.args.get('data')
-      
-      a_json = json.loads(data_json)
+
 
       return {
 
-         "result": a_json
+         "result": data
       }
+
+      # data_json = request.args.get('data')
+      
+      # a_json = json.loads(data_json)
+
+      
 
       # df = pd.DataFrame.from_dict(a_json)
       # df = utils.data_preprocessing(df, args)

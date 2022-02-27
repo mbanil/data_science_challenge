@@ -5,11 +5,22 @@ import numpy as np
 
 # from logger import LOG
 
-def data_extraction(file_name):
+def data_extraction(file_path):
+    """Method to load data from csv
+
+    Args:
+        file_name : path to file
+
+    Raises:
+        FileNotFoundError: Exception if the file is not found
+
+    Returns:
+        _type_: pandas dataframe
+    """
 
     try:
-        if os.path.isfile(file_name):
-            df = pd.read_csv(file_name)
+        if os.path.isfile(file_path):
+            df = pd.read_csv(file_path)
             return df
 
         raise FileNotFoundError(errno.ENOENT, os.strerror(errno.ENOENT), file_name)
@@ -19,6 +30,15 @@ def data_extraction(file_name):
             
 
 def data_preprocessing(df, args):
+    """Method to preprocess data before training
+
+    Args:
+        df : Input dataframe
+        args : arguments
+
+    Returns:
+        Preprocessed dataframe
+    """
 
     df = drop_unnecessary_column(df, args.columns_to_drop)
 
@@ -42,6 +62,14 @@ def data_preprocessing(df, args):
 
 
 def replace2bin(df):
+    """Replaces columns with "YES" or "NO" to 1 and 0 respectively
+
+    Args:
+        df : Input Dataframe
+
+    Returns:
+        Processed dataframe
+    """
 
     df['property_damage'].replace(to_replace='YES', value=1, inplace=True)
     df['property_damage'].replace(to_replace='NO', value=0, inplace=True)
@@ -109,6 +137,15 @@ def preprocess_hobbies(df):
 
 
 def remove_nan2no(df, column):
+    """Replaces values with "NaN" to "NO"
+
+    Args:
+        df: Input pandas dataframe
+        column: cloumns in which the values have to be changes
+
+    Returns:
+        processed df
+    """
 
     df[column].fillna('NO', inplace = True)
 
@@ -119,7 +156,7 @@ def replace_na2mode(df, column):
     """Replaced the NaN with mode in the column selected
 
     Args:
-        df : spark dataframe
+        df : pandas dataframe
         column : column in which the '?' values are to be replace
 
     Returns:
@@ -135,17 +172,16 @@ def encode_data(df,columns_to_encode):
     """One Hot encoding of categorical columns
 
     Args:
-        df : spark dataframe
+        df : pandas dataframe
         col : categorical columns
 
     Returns:
-        spark dataframe with one-hot encoding
+        pandas dataframe with one-hot encoding
     """
 
     cat_df = pd.get_dummies(df[columns_to_encode])
 
     df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  # joining numeric columns
-    # df_clean.head()
 
     return df_clean
 
@@ -154,7 +190,7 @@ def store_schema(df, schema_file):
     """Store the column names as a schema file
 
     Args:
-        df : spark dataframe
+        df : pandas dataframe
         schema_file : file path
     """
 
