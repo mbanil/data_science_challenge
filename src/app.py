@@ -22,59 +22,61 @@ def index():
    return render_template('index.html')
 
 
-@app.route('/predict-fraud', methods = ['GET'])
-def predict_fraud(data=None):
+@app.route('/predictfraud', methods = ['GET'])
+def predictfraud(data=None):
+       
+   return "OK"
    
-   try:
-      args = parse_args()
+   # try:
+   #    args = parse_args()
 
-      data_json = request.args.get('data')
+   #    data_json = request.args.get('data')
       
       
-      return {
+   #    return {
 
-         "results": str(data_json)
-      }
+   #       "results": str(data_json)
+   #    }
 
-      # a_json = json.loads(data_json)
-
-      
-
-      # df = pd.DataFrame.from_dict(a_json)
-      # df = utils.data_preprocessing(df, args)
-      # df = utils.encode_data(df, args.columns_to_encode)
+   #    # a_json = json.loads(data_json)
 
       
 
-      # schema = training.load_pickle(args.schema_path)
+   #    # df = pd.DataFrame.from_dict(a_json)
+   #    # df = utils.data_preprocessing(df, args)
+   #    # df = utils.encode_data(df, args.columns_to_encode)
 
-      # cols_original = list(schema["columns"])
-      # cols_new = list(df.columns)
+      
 
-      # for col in cols_new:
-      #    if col.find("\\") != -1:
-      #       df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+   #    # schema = training.load_pickle(args.schema_path)
 
-      # cols_new = list(df.columns)
-      # for col in cols_original:
-      #    if not col in cols_new:
-      #       df.insert(2, col, np.full(df.shape[0], 0), True)
+   #    # cols_original = list(schema["columns"])
+   #    # cols_new = list(df.columns)
 
-      # df = df.reindex(columns=cols_original)
+   #    # for col in cols_new:
+   #    #    if col.find("\\") != -1:
+   #    #       df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
 
-      # #  check original schema
+   #    # cols_new = list(df.columns)
+   #    # for col in cols_original:
+   #    #    if not col in cols_new:
+   #    #       df.insert(2, col, np.full(df.shape[0], 0), True)
 
-      # model = training.load_pickle(args.model_path)
-      # df = training.standardize_data(df)
-      # model.predict(df)
-      # results = model.predict(df)
+   #    # df = df.reindex(columns=cols_original)
 
-      # return {
-      #    'results': json. dumps(results.tolist())
-      # }
-   except Exception as e:
-      print(e)
-      return( str(e))
+   #    # #  check original schema
+
+   #    # model = training.load_pickle(args.model_path)
+   #    # df = training.standardize_data(df)
+   #    # model.predict(df)
+   #    # results = model.predict(df)
+
+   #    # return {
+   #    #    'results': json. dumps(results.tolist())
+   #    # }
+   # except Exception as e:
+   #    print(e)
+   #    return( str(e))
 
 
 
