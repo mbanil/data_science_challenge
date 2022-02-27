@@ -53,16 +53,16 @@ def train_randomforest(X_train, y_train, params=None):
 
 
 def tune_hyper_params(model, grid_params, X_train, y_train):
-    """Tune hyper parameters
+    """Tune hyper parameters using GridSearch
 
     Args:
         model : Classifier model    
         grid_params: Range of hyper parameters for tuning
-        X_train (_type_): _description_
-        y_train (_type_): _description_
+        X_train: Input training data
+        y_train: Output training data
 
     Returns:
-        _type_: _description_
+        Grid search output
     """
     
     grid_search = GridSearchCV(model, grid_params, n_jobs = -1,  cv = 5, verbose = 1)
@@ -71,12 +71,26 @@ def tune_hyper_params(model, grid_params, X_train, y_train):
     return grid_search
 
 def save_pickle(data, path):
+    """Save data as a pickle file
+
+    Args:
+        data : Data to stored
+        path : Path of the pickle file
+    """
 
     file = open(os.getcwd() + path, "wb")
     pickle.dump(data, file)
     file.close()
 
 def load_pickle(path):
+    """Load pickle file
+
+    Args:
+        path : Path for the pickle file
+
+    Returns:
+        Loaded pickle file
+    """
 
     data = pickle.load( open(os.getcwd() + path, "rb" ) )
 
@@ -84,6 +98,12 @@ def load_pickle(path):
     
 
 def train(df, args):
+    """Train the data and saved the trained model
+
+    Args:
+        df: pandas dataframe
+        args : Input arguments
+    """
 
     df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
     df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
