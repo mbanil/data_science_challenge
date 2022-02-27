@@ -31,49 +31,53 @@ def index():
 @app.route('/predictfraud', methods = ['GET'])
 def predictfraud(data=None):
        
-   args = parse_args()
-       
-   # return "OK"
-   
-   data_json = request.args.get('data')
-   
-
-   a_json = json.loads(data_json)
-
-   
-
-   df = pd.DataFrame.from_dict(a_json)
-   df = utils.data_preprocessing(df, args)
-   df = utils.encode_data(df, args.columns_to_encode)
-
-   
-
-   schema = training.load_pickle(args.schema_path)
-
-   cols_original = list(schema["columns"])
-   cols_new = list(df.columns)
-
-   for col in cols_new:
-      if col.find("\\") != -1:
-         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
-
-   cols_new = list(df.columns)
-   for col in cols_original:
-      if not col in cols_new:
-         df.insert(2, col, np.full(df.shape[0], 0), True)
-
-   df = df.reindex(columns=cols_original)
-
-   #  check original schema
-
-   model = training.load_pickle(args.model_path)
-   df = training.standardize_data(df)
-   model.predict(df)
-   results = model.predict(df)
-
    return {
-      'results': json. dumps(results.tolist())
-   }
+      "result": sys.argv
+   } 
+       
+   # args = parse_args()
+       
+   # # return "OK"
+   
+   # data_json = request.args.get('data')
+   
+
+   # a_json = json.loads(data_json)
+
+   
+
+   # df = pd.DataFrame.from_dict(a_json)
+   # df = utils.data_preprocessing(df, args)
+   # df = utils.encode_data(df, args.columns_to_encode)
+
+   
+
+   # schema = training.load_pickle(args.schema_path)
+
+   # cols_original = list(schema["columns"])
+   # cols_new = list(df.columns)
+
+   # for col in cols_new:
+   #    if col.find("\\") != -1:
+   #       df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+
+   # cols_new = list(df.columns)
+   # for col in cols_original:
+   #    if not col in cols_new:
+   #       df.insert(2, col, np.full(df.shape[0], 0), True)
+
+   # df = df.reindex(columns=cols_original)
+
+   # #  check original schema
+
+   # model = training.load_pickle(args.model_path)
+   # df = training.standardize_data(df)
+   # model.predict(df)
+   # results = model.predict(df)
+
+   # return {
+   #    'results': json. dumps(results.tolist())
+   # }
 
 
 
