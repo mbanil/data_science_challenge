@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
 from logger import LOG
 from args import get_args
@@ -31,5 +29,5 @@ if __name__ == "__main__":
 
 
     except Exception as e:
-        print("Exception ")
+        LOG.exception("Exception occured: " + e)
 

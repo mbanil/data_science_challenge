@@ -7,11 +7,11 @@ def get_args():
 
     parser.add_argument("--app_name", type=str, default="Zeiss_classification_task")
 
-    parser.add_argument("--data_filename", type=str, default="./src/data_repo/data/training_data.csv",
+    parser.add_argument("--data_filename", type=str, default="./data_repo/data/training_data.csv",
                                     help="data file in csv format")
-    parser.add_argument("--schema_path", type=str, default="/src/data_repo/feature_store/schema.pkl")
-    parser.add_argument("--best_hyper_params_filepath", type=str, default='/src/data_repo/best_hyper_params/best_hyper_parameters.pkl')
-    parser.add_argument("--model_path", type=str, default='/src/model/model.pkl')
+    parser.add_argument("--schema_path", type=str, default="/data_repo/feature_store/schema.pkl")
+    parser.add_argument("--best_hyper_params_filepath", type=str, default='/data_repo/best_hyper_params/best_hyper_parameters.pkl')
+    parser.add_argument("--model_path", type=str, default='/model/model.pkl')
 
     parser.add_argument("--columns_to_drop", type=list, 
                         default=['policy_number','policy_bind_date','policy_state','insured_zip','incident_location',

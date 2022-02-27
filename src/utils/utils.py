@@ -204,6 +204,9 @@ def encode_data(df,columns_to_encode):
 
     cat_df = pd.get_dummies(df[columns_to_encode])
 
+    cat_df = cat_df.join(df[[
+    'fraud_reported']])
+
     df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  #joining numeric columns
 
     LOG.info("One hot encoding of categorical values")
