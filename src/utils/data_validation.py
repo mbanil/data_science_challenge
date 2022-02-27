@@ -1,4 +1,4 @@
-
+import numpy as np
 
 def configure_schema(schema, df):
     """Adjust the schema of the new data to that used for training  
@@ -10,6 +10,7 @@ def configure_schema(schema, df):
     Returns:
         schema adjusted dataframe
     """
+    LOG.info("Configuring one hot encoding for prediction data")
 
     cols_original = list(schema["columns"])
     cols_new = list(df.columns)

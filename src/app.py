@@ -51,31 +51,10 @@ def predictfraud(data=None):
 
    df = pd.DataFrame.from_dict(a_json)
    df = utils.data_preprocessing(df, args)
-
-   print(df.columns)
    df = utils.encode_data(df, args.columns_to_encode)
 
    schema = training.load_pickle(args.schema_path)
-   
-   # df = data_validation.configure_schema(schema, df)
-
-   cols_original = list(schema["columns"])
-   cols_new = list(df.columns)
-
-   for col in cols_new:
-      if col.find("\\") != -1:
-         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
-
-   cols_new = list(df.columns)
-   for col in cols_original:
-      if not col in cols_new:
-         df.insert(2, col, np.full(df.shape[0], 0))
-
-   df = df.reindex(columns=cols_original)
-
-   #  check original schema
-
-   print(df.columns)
+   df = data_validation.configure_schema(schema, df)
 
    model = training.load_pickle(args.model_path)
    df = training.standardize_data(df)
