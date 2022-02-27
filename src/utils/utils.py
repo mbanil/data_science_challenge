@@ -88,6 +88,10 @@ def replace2bin(df):
     df['police_report_available'].replace(to_replace='YES', value=1, inplace=True)
     df['police_report_available'].replace(to_replace='NO', value=0, inplace=True)
 
+    if('fraud_reported' in list(df.columns)):
+        df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
+        df['fraud_reported'].replace(to_replace='N', value=0, inplace=True)
+
     LOG.info("Replacing values to binary")
     LOG.info(df.head())
 
@@ -204,8 +208,9 @@ def encode_data(df,columns_to_encode):
 
     cat_df = pd.get_dummies(df[columns_to_encode])
 
-    cat_df = cat_df.join(df[[
-    'fraud_reported']])
+    print(cat_df.columns)
+
+    print(df._get_numeric_data().columns)
 
     df_clean = pd.concat([cat_df, df._get_numeric_data()], axis=1)  #joining numeric columns
 
@@ -214,18 +219,3 @@ def encode_data(df,columns_to_encode):
 
     return df_clean
 
-
-def store_schema(df, schema_file):
-    """Store the column names as a schema file
-
-    Args:
-        df : pandas dataframe
-        schema_file : file path
-    """
-
-    LOG.info("Save schema file of the df")
-
-    if not os.path.isfile(schema_file):
-        schema = {'columns': list(df.columns)}
-        schema_file = open(os.getcwd() + schema_file, "wb")
-        pickle.dump(schema, schema_file)

@@ -22,7 +22,6 @@ if __name__ == "__main__":
         data = utils.data_extraction(args.data_filename)
         data = utils.data_preprocessing(data, args)
         data = utils.encode_data(data, args.columns_to_encode)
-        utils.store_schema(data, args.schema_path)
         train(data, args)
 
         LOG.info('End execution')

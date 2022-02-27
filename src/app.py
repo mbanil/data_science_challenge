@@ -14,7 +14,7 @@ import numpy as np
 from types import SimpleNamespace
 
 
-from utils import utils, training
+from utils import utils, training, data_validation
 import requests
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -33,8 +33,6 @@ def index():
 
 @app.route('/predictfraud', methods = ['GET'])
 def predictfraud(data=None):
-
-   
    
    args = {
          'columns_to_drop': ['policy_number', 'policy_bind_date', 'policy_state', 'insured_zip', 'incident_location', 'incident_date', 'auto_make', 'auto_model', 'insured_occupation', 'age', 'total_claim_amount'], 
@@ -47,33 +45,19 @@ def predictfraud(data=None):
       }
 
    args = SimpleNamespace(**args)
-   
-
-   # converted_dict = vars(args)
-   # print(args.model_path)
-       
-   # return {
-   #    "result": str(args)
-   # } 
-       
-   # args = parse_args()
-       
-   # return "OK"
-   
+      
    data_json = request.args.get('data')
-   
-
    a_json = json.loads(data_json)
-
-   
 
    df = pd.DataFrame.from_dict(a_json)
    df = utils.data_preprocessing(df, args)
+
+   print(df.columns)
    df = utils.encode_data(df, args.columns_to_encode)
 
-   
-
    schema = training.load_pickle(args.schema_path)
+   
+   # df = data_validation.configure_schema(schema, df)
 
    cols_original = list(schema["columns"])
    cols_new = list(df.columns)
@@ -85,11 +69,13 @@ def predictfraud(data=None):
    cols_new = list(df.columns)
    for col in cols_original:
       if not col in cols_new:
-         df.insert(2, col, np.full(df.shape[0], 0), True)
+         df.insert(2, col, np.full(df.shape[0], 0))
 
    df = df.reindex(columns=cols_original)
 
    #  check original schema
+
+   print(df.columns)
 
    model = training.load_pickle(args.model_path)
    df = training.standardize_data(df)

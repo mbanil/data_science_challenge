@@ -106,7 +106,21 @@ def load_pickle(path):
     data = pickle.load( open(os.getcwd() + path, "rb" ) )
 
     return data
-    
+
+
+def store_schema(df, schema_file):
+    """Store the column names as a schema file
+
+    Args:
+        df : pandas dataframe
+        schema_file : file path
+    """
+
+    LOG.info("Save schema file of the df")
+
+    schema = {'columns': list(df.columns)}
+    save_pickle(schema, schema_file)
+
 
 def train(df, args):
     """Train the data and saved the trained model
@@ -117,13 +131,12 @@ def train(df, args):
     """
     LOG.info("Begin training data")
 
-    df['fraud_reported'].replace(to_replace='Y', value=1, inplace=True)
-    df['fraud_reported'].replace(to_replace='N',  value=0, inplace=True)
-
     LOG.info("Create input and output for training")
 
     X = df[df.columns.drop('fraud_reported')]
     Y = df['fraud_reported']
+
+    store_schema(X, args.schema_path)
 
     LOG.info("Split the data into training and test set")
 
