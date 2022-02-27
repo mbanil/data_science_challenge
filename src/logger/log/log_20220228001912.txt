@@ -1,0 +1,124 @@
+2022-02-28:00:19:13,82 INFO     [utils.py:157] NumExpr defaulting to 8 threads.
+2022-02-28:00:19:13,885 INFO     [train-classification-model.py:16] Begin execution
+2022-02-28:00:19:13,887 INFO     [train-classification-model.py:20] Arguments:
+Namespace(app_name='Zeiss_classification_task', best_hyper_params_filepath='/data_repo/best_hyper_params/best_hyper_parameters.pkl', columns_to_drop=['policy_number', 'policy_bind_date', 'policy_state', 'insured_zip', 'incident_location', 'incident_date', 'auto_make', 'auto_model', 'insured_occupation', 'age', 'total_claim_amount'], columns_to_encode=['policy_csl', 'insured_sex', 'insured_education_level', 'insured_hobbies', 'insured_relationship', 'incident_type', 'incident_severity', 'authorities_contacted', 'incident_state', 'incident_city', 'collision_type'], data_filename='./data_repo/data/training_data.csv', grid_params={'criterion': ['gini', 'entropy'], 'max_depth': [3, 5, 7, 10], 'min_samples_split': range(2, 10), 'min_samples_leaf': range(2, 10)}, model_path='/model/model.pkl', preprocess_hobbies=True, schema_path='/data_repo/feature_store/schema.pkl', store_schema=True, tune_hyper_params=False)
+2022-02-28:00:19:13,889 INFO     [utils.py:23] Loading data
+2022-02-28:00:19:13,898 INFO     [utils.py:27] Dataframe shape: (990, 39)
+2022-02-28:00:19:13,899 INFO     [utils.py:28]    months_as_customer  age  policy_number policy_bind_date  ...  auto_make auto_model  auto_year  fraud_reported
+0                 328   48         521585       17-10-2014  ...       Saab        92x       2004               Y
+1                 228   42         342868       27-06-2006  ...   Mercedes       E400       2007               Y
+2                 134   29         687698       06-09-2000  ...      Dodge        RAM       2007               N
+3                 256   41         227811       25-05-1990  ...  Chevrolet      Tahoe       2014               Y
+4                 228   44         367455       06-06-2014  ...     Accura        RSX       2009               N
+
+[5 rows x 39 columns]
+2022-02-28:00:19:13,958 INFO     [utils.py:49] Starting data pre-processing
+2022-02-28:00:19:13,959 INFO     [utils.py:128] Dropped unnecessary columns from the dataframe
+2022-02-28:00:19:13,961 INFO     [utils.py:129]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,9 INFO     [utils.py:147] Pre-processed hobbies columns
+2022-02-28:00:19:14,9 INFO     [utils.py:148]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,56 INFO     [utils.py:109] Removed outliers in column 'umbrella_limit'
+2022-02-28:00:19:14,56 INFO     [utils.py:110]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,106 INFO     [utils.py:188] Replacing NaN values with mode of the column
+2022-02-28:00:19:14,107 INFO     [utils.py:189]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,175 INFO     [utils.py:166] Replacing NaN values to 'NO'
+2022-02-28:00:19:14,176 INFO     [utils.py:167]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,223 INFO     [utils.py:166] Replacing NaN values to 'NO'
+2022-02-28:00:19:14,223 INFO     [utils.py:167]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,272 INFO     [utils.py:91] Replacing values to binary
+2022-02-28:00:19:14,272 INFO     [utils.py:92]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,317 INFO     [utils.py:69] Finished data pre-processing
+2022-02-28:00:19:14,318 INFO     [utils.py:70]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,376 INFO     [utils.py:212] One hot encoding of categorical values
+2022-02-28:00:19:14,377 INFO     [utils.py:213]    months_as_customer policy_csl  policy_deductable  ...  vehicle_claim  auto_year fraud_reported
+0                 328    250/500               1000  ...          52080       2004              Y
+1                 228    250/500               2000  ...           3510       2007              Y
+2                 134    100/300               2000  ...          23100       2007              N
+3                 256    250/500               2000  ...          50720       2014              Y
+4                 228   500/1000               1000  ...           4550       2009              N
+
+[5 rows x 28 columns]
+2022-02-28:00:19:14,422 INFO     [utils.py:226] Save schema file of the df
+2022-02-28:00:19:14,423 INFO     [training.py:118] Begin training data
+2022-02-28:00:19:14,425 INFO     [training.py:123] Create input and output for training
+2022-02-28:00:19:14,426 INFO     [training.py:128] Split the data into training and test set
+2022-02-28:00:19:14,429 INFO     [training.py:26] Standardize Data
+2022-02-28:00:19:14,432 INFO     [training.py:26] Standardize Data
+2022-02-28:00:19:14,436 INFO     [training.py:137] "Training Dataset Count: (791, 67)
+2022-02-28:00:19:14,436 INFO     [training.py:138] "Test Dataset Count: (198, 67)
+2022-02-28:00:19:14,437 INFO     [training.py:104] Load data as a pickle file
+2022-02-28:00:19:14,437 INFO     [training.py:46] "Train random forest with hyper-params: {'criterion': 'gini', 'max_depth': 5, 'min_samples_leaf': 2, 'min_samples_split': 2}
+2022-02-28:00:19:14,438 INFO     [training.py:54] Fit random forest to training data
+2022-02-28:00:19:14,643 INFO     [training.py:153] Predict test data
+2022-02-28:00:19:14,670 INFO     [training.py:156] Training Accuracy: 0.854614412136536
+2022-02-28:00:19:14,681 INFO     [training.py:157] "Testing Accuarcy: 0.8636363636363636
+2022-02-28:00:19:14,682 INFO     [training.py:159] [[123  22]
+ [  5  48]]
+2022-02-28:00:19:14,687 INFO     [training.py:160]               precision    recall  f1-score   support
+
+           0       0.96      0.85      0.90       145
+           1       0.69      0.91      0.78        53
+
+    accuracy                           0.86       198
+   macro avg       0.82      0.88      0.84       198
+weighted avg       0.89      0.86      0.87       198
+
+2022-02-28:00:19:14,689 INFO     [training.py:162] End training data
+2022-02-28:00:19:14,689 INFO     [training.py:88] Save data as a pickle file
+2022-02-28:00:19:14,702 INFO     [train-classification-model.py:28] End execution
