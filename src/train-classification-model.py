@@ -15,11 +15,11 @@ if __name__ == "__main__":
     # try:
     start_time = datetime.now() 
 
-    # LOG.info('Begin execution')
+    LOG.info('Begin execution')
 
     args = get_args()
 
-    # LOG.info('Arguments:\n{}'.format(args))
+    LOG.info('Arguments:\n{}'.format(args))
 
     data = utils.data_extraction(args.data_filename)
     data = utils.data_preprocessing(data, args)

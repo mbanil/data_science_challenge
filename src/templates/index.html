@@ -52,7 +52,7 @@
                     };
                     $.ajax({
                         type: "get",
-                        url: "./predict-fraud",
+                        url: "./predictfraud",
                         data: postData,
                         success: function (responseData, textStatus, jqXHR) {
                             document.getElementById('result').innerText = "Result: " + responseData['results'].toString()
