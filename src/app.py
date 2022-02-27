@@ -11,6 +11,8 @@ import argparse
 import json
 import pandas as pd
 import numpy as np
+from types import SimpleNamespace
+
 
 from utils import utils, training
 import requests
@@ -30,56 +32,72 @@ def index():
 
 @app.route('/predictfraud', methods = ['GET'])
 def predictfraud(data=None):
+
+   
+   
+   args = {
+         'columns_to_drop': ['policy_number', 'policy_bind_date', 'policy_state', 'insured_zip', 'incident_location', 'incident_date', 'auto_make', 'auto_model', 'insured_occupation', 'age', 'total_claim_amount'], 
+         'columns_to_encode': ['policy_csl', 'insured_sex', 'insured_education_level', 'insured_hobbies', 'insured_relationship', 'incident_type', 'incident_severity', 'authorities_contacted', 'incident_state', 'incident_city', 'collision_type'], 
+         'preprocess_hobbies': True, 
+         'store_schema': False, 
+         'schema_path': '/data_repo/feature_store/schema.pkl', 
+         'best_hyper_params_filepath': '/data_repo/best_hyper_params/best_hyper_parameters.pkl', 
+         'model_path': '/model/model.pkl'
+      }
+
+   args = SimpleNamespace(**args)
+   
+
+   # converted_dict = vars(args)
+   # print(args.model_path)
        
-   args = parse_args()
-       
-   return {
-      "result": sys.argv
-   } 
+   # return {
+   #    "result": str(args)
+   # } 
        
    # args = parse_args()
        
-   # # return "OK"
+   # return "OK"
    
-   # data_json = request.args.get('data')
-   
-
-   # a_json = json.loads(data_json)
-
+   data_json = request.args.get('data')
    
 
-   # df = pd.DataFrame.from_dict(a_json)
-   # df = utils.data_preprocessing(df, args)
-   # df = utils.encode_data(df, args.columns_to_encode)
+   a_json = json.loads(data_json)
 
    
 
-   # schema = training.load_pickle(args.schema_path)
+   df = pd.DataFrame.from_dict(a_json)
+   df = utils.data_preprocessing(df, args)
+   df = utils.encode_data(df, args.columns_to_encode)
 
-   # cols_original = list(schema["columns"])
-   # cols_new = list(df.columns)
+   
 
-   # for col in cols_new:
-   #    if col.find("\\") != -1:
-   #       df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
+   schema = training.load_pickle(args.schema_path)
 
-   # cols_new = list(df.columns)
-   # for col in cols_original:
-   #    if not col in cols_new:
-   #       df.insert(2, col, np.full(df.shape[0], 0), True)
+   cols_original = list(schema["columns"])
+   cols_new = list(df.columns)
 
-   # df = df.reindex(columns=cols_original)
+   for col in cols_new:
+      if col.find("\\") != -1:
+         df.rename(columns = {col:col.replace("\\", "")}, inplace = True)
 
-   # #  check original schema
+   cols_new = list(df.columns)
+   for col in cols_original:
+      if not col in cols_new:
+         df.insert(2, col, np.full(df.shape[0], 0), True)
 
-   # model = training.load_pickle(args.model_path)
-   # df = training.standardize_data(df)
-   # model.predict(df)
-   # results = model.predict(df)
+   df = df.reindex(columns=cols_original)
 
-   # return {
-   #    'results': json. dumps(results.tolist())
-   # }
+   #  check original schema
+
+   model = training.load_pickle(args.model_path)
+   df = training.standardize_data(df)
+   model.predict(df)
+   results = model.predict(df)
+
+   return {
+      'results': json. dumps(results.tolist())
+   }
 
 
 
