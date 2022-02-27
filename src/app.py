@@ -31,6 +31,8 @@ def index():
 @app.route('/predictfraud', methods = ['GET'])
 def predictfraud(data=None):
        
+   args = parse_args()
+       
    return {
       "result": sys.argv
    } 
@@ -94,11 +96,16 @@ def parse_args():
    parser.add_argument("--preprocess_hobbies", type=bool, default=True)
    parser.add_argument("--store_schema", type=bool, default=False)
    
-   parser.add_argument("--schema_path", type=str, default="/src/data_repo/feature_store/schema.pkl")
-   parser.add_argument("--best_hyper_params_filepath", type=str, default='/src/data_repo/best_hyper_params/best_hyper_parameters.pkl')
-   parser.add_argument("--model_path", type=str, default='/src/model/model.pkl')
+   # parser.add_argument("--schema_path", type=str, default="/src/data_repo/feature_store/schema.pkl")
+   # parser.add_argument("--best_hyper_params_filepath", type=str, default='/src/data_repo/best_hyper_params/best_hyper_parameters.pkl')
+   # parser.add_argument("--model_path", type=str, default='/src/model/model.pkl')
+
+   
+   parser.add_argument("--schema_path", type=str, default="/data_repo/feature_store/schema.pkl")
+   parser.add_argument("--best_hyper_params_filepath", type=str, default='/data_repo/best_hyper_params/best_hyper_parameters.pkl')
+   parser.add_argument("--model_path", type=str, default='/model/model.pkl')
    
    return parser.parse_args()
 
 if __name__ == '__main__':
-   app.run(host='0.0.0.0', port=5000, debug=True)
+   app.run()
