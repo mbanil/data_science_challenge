@@ -12,6 +12,14 @@ from pyspark.ml import Pipeline
 from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
 
 def prepare_df(df):
+    """Prepare the df by creating feature and label columns used for training the data
+
+    Args:
+        df: spark training dataframe
+
+    Returns:
+        Processed spark df
+    """
 
     df = df.withColumnRenamed("fraud_reported","label")
     features_cols = df.columns
@@ -23,6 +31,15 @@ def prepare_df(df):
     
 
 def train_model_with_hyper_params_tuning(train, best_params_path):
+    """Train the model and tune hyperparameters
+
+    Args:
+        train: training data
+        best_params_path: path to save the best hyper parameters
+
+    Returns:
+        trained model
+    """
 
     rf = RandomForestClassifier(featuresCol = 'features', labelCol = 'label')
 
@@ -48,6 +65,15 @@ def train_model_with_hyper_params_tuning(train, best_params_path):
     return cvModel
 
 def train_model(best_params_path, train):
+    """Train model with existing hyper parameter values
+
+    Args:
+        best_params_path: Best hyperparamter file path
+        train: training data
+
+    Returns:
+        trained model
+    """
 
     best_hyper_params = pickle.load( open(os.getcwd() + best_params_path + '/best_hyper_parameters.pkl', "rb" ) )
     
@@ -60,6 +86,13 @@ def train_model(best_params_path, train):
 
 
 def train(spark, df, args):
+    """Perform data processing, call the training methods and save the trained model
+
+    Args:
+        spark (_type_): _description_
+        df (_type_): _description_
+        args (_type_): _description_
+    """
 
     df = prepare_df(df)
 
