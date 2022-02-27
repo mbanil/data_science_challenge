@@ -31,14 +31,16 @@ def prediction_product(data=None):
       
       a_json = json.loads(data_json)
 
-      df = pd.DataFrame.from_dict(a_json)
-      df = utils.data_preprocessing(df, args)
-      df = utils.encode_data(df, args.columns_to_encode)
-
       return {
 
-         "result": df.to_json()
+         "result": a_json
       }
+
+      # df = pd.DataFrame.from_dict(a_json)
+      # df = utils.data_preprocessing(df, args)
+      # df = utils.encode_data(df, args.columns_to_encode)
+
+      
 
       # schema = training.load_pickle(args.schema_path)
 
