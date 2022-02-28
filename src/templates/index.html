@@ -30,6 +30,7 @@
                         <textarea class="form-control" id="main_text" rows="3"></textarea>
                     </div>
                 </form>
+                <!-- <input class="form-control mr-sm-2" type="search" placeholder="Search" id="search_keyword" aria-label="Search"> -->
                 <button class="button btn btn-primary " id="start">Run</button>
                 <br>
                 <br>
@@ -61,7 +62,17 @@
                             console.log(errorThrown);
                         }
                     })})
-            </script>
+            //         $.ajax({
+            //                 url: 'http://127.0.0.1:5000/get',
+            //                 type: 'get',
+            //                 data: {
+            //                     search_keyword:document.getElementById('search_keyword').value
+            //                 },
+            //                 contentType: "image/jpg",
+            //                 success: function (result) {
+            //                 }
+            //             });
+            // </script>
           
     </body>
 </html>

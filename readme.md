@@ -13,7 +13,18 @@ The repository consists of the following folders:
     * The best performing model is selected and feature importance is identified. Least affecting features are removed using a threshold.
     * After the least important features are removed, the model is tuned to find the best hyperparamter using grid search.
 
-* src : 
+* src : Contains the code for training a classification model. This is built using pandas.
+    * data_repo folder consists of training data, schema information and best tuned hyper parameters.
+    * logger folder contains code for logging and log files generated
+    * model folder consists of a trained classification model that is saved
+    * templates folder consists of html file used for the app
+    * app.py - flask app used to call the model for prediction
+    * args.py - parse args for the training script
+    * train-classifier-model.py - main script for training the model
+
+* src_pyspark: This folder has the same structure as 'src' folder. The only missing feature here is the restoration of one-hot encoding order while predicting results.
+
+* CI/CD is carried out using Github actions. The python app is deployed to the Azure web app
 
 
 
