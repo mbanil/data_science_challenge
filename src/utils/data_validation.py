@@ -1,5 +1,7 @@
 import numpy as np
 
+from logger import LOG
+
 def configure_schema(schema, df):
     """Adjust the schema of the new data to that used for training  
 
