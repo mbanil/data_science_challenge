@@ -33,7 +33,6 @@ Python version = 3.7.12
 working dir: "./src"
 
 ```
-working dir: "./src"
 
 python -m venv venv
 source venv/bin/activate
@@ -72,4 +71,6 @@ optional arguments:
 
 # Example:
 
+```
 python train-classification-model.py
+```
