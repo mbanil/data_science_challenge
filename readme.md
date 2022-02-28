@@ -24,37 +24,52 @@ The repository consists of the following folders:
 
 * src_pyspark: This folder has the same structure as 'src' folder. The only missing feature here is the restoration of one-hot encoding order while predicting results.
 
-* CI/CD is carried out using Github actions. The python app is deployed to the Azure web app
+* CI/CD is carried out using Github actions. The python app is deployed to the Azure web app. The app can be accessed form https://zeisswebapp.azurewebsites.net/
 
+# Installation
 
+Python version = 3.7.12
 
-usage: train-classification-model.py [-h] [--app_name APP_NAME]
-                                     [--data_filename DATA_FILENAME]
-                                     [--schema_path SCHEMA_PATH]
-                                     [--best_hyper_params_filepath BEST_HYPER_PARAMS_FILEPATH]
-                                     [--model_path MODEL_PATH]
-                                     [--columns_to_drop COLUMNS_TO_DROP]
-                                     [--columns_to_encode COLUMNS_TO_ENCODE]
-                                     [--store_schema STORE_SCHEMA]
-                                     [--preprocess_hobbies PREPROCESS_HOBBIES]
-                                     [--tune_hyper_params TUNE_HYPER_PARAMS]
-                                     [--grid_params GRID_PARAMS]
+working dir: "./src"
 
-Zeiss Task
+```
+working dir: "./src"
 
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+# Usage
+
+```
+train-classification-model.py [-h] [--data_filename DATA_FILENAME]
+                                [--schema_path SCHEMA_PATH]
+                                [--best_hyper_params_filepath BEST_HYPER_PARAMS_FILEPATH]
+                                [--model_path MODEL_PATH]
+                                [--columns_to_drop COLUMNS_TO_DROP]
+                                [--columns_to_encode COLUMNS_TO_ENCODE]
+                                [--store_schema STORE_SCHEMA]
+                                [--preprocess_hobbies PREPROCESS_HOBBIES]
+                                [--tune_hyper_params TUNE_HYPER_PARAMS]
+                                [--grid_params GRID_PARAMS]
 
 
 optional arguments:
   -h, --help            show this help message and exit
-  --app_name APP_NAME
-  --data_filename DATA_FILENAME
-                        data file in csv format
-  --schema_path SCHEMA_PATH
-  --best_hyper_params_filepath BEST_HYPER_PARAMS_FILEPATH
-  --model_path MODEL_PATH
-  --columns_to_drop COLUMNS_TO_DROP
-  --columns_to_encode COLUMNS_TO_ENCODE
-  --store_schema STORE_SCHEMA
-  --preprocess_hobbies PREPROCESS_HOBBIES
-  --tune_hyper_params TUNE_HYPER_PARAMS
-  --grid_params GRID_PARAMS
+  --data_filename               training data path
+  --schema_path                 path for saving the schema file
+  --best_hyper_params_filepath  path for saving the best hyper paramteres
+  --model_path                  path for saving the best hyper parameter
+  --columns_to_drop             columns to be dropped from the df
+  --columns_to_encode           columns to be encoded
+  --preprocess_hobbies          True if the 'hobbies column has to be preprocessed'
+  --tune_hyper_params           True if hyper parameters have to be tuned
+  --grid_params                 Parameters for running grid search
+
+
+```
+
+# Example:
+
+python train-classification-model.py
