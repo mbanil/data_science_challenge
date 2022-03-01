@@ -24,7 +24,7 @@ The repository consists of the following folders:
 
 * src_pyspark: This folder has the same structure as 'src' folder. The only missing feature here is the restoration of one-hot encoding order while predicting results.
 
-* CI/CD is carried out using Github actions. The python app is deployed to the Azure web app. The app can be accessed form https://zeisswebapp.azurewebsites.net/
+* CI/CD is carried out using Github actions. The python app is deployed to the Azure web app. The app can be accessed from https://zeisswebapp.azurewebsites.net/
 
 # Installation
 
